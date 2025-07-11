@@ -1,4 +1,3 @@
-# Equivariant Diffusion for Molecule Generation in 3D
 ---
 title: "Equivariant Diffusion for Molecule Generation in 3D"
 date: 2024-11-12
