@@ -11,54 +11,35 @@ redirect_from:
 
 Education
 ======
-* Ph.D in Version Control Theory, GitHub University, 2018 (expected)
-* M.S. in Jekyll, GitHub University, 2014
-* B.S. in GitHub, GitHub University, 2012
+* MSc in Computer Science (2023-2026)
+* B-Tech in Information Technology & Mathematical Innovation (2017-2021)
 
 Work experience
 ======
-* Spring 2024: Academic Pages Collaborator
-  * GitHub University
-  * Duties includes: Updates and improvements to template
-  * Supervisor: The Users
+* Vreed Immobilien Digital: Working Student (July 2024 - April 2025)
+  * Classified WBS70 buildings with 78% accuracy using a VGG16-based model and transfer learning.
+  * Detected solar panels and architectural elements using Detectron2-R50-FPN and satellite imagery.
+  * Identified balconies and large windows for renovation planning, achieving an AP score of 54.
 
-* Fall 2015: Research Assistant
-  * GitHub University
-  * Duties included: Merging pull requests
-  * Supervisor: Professor Hub
+* JindalX: Software Engineer (April 2023 - Sept 2023)
+  * Built an automation tool for Healthcare RCM workflows using Python and Selenium.
+  * Reduced manual effort and errors by automating end-to-end billing tasks.
+  * Achieved significant cost savings through improved process accuracy and efficiency.
 
-* Summer 2015: Research Assistant
-  * GitHub University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
+* SaaS Platformen ApS: Software Engineer (Mar 2022 - Sept 2023)
+  * Developed backend services with Python and AWS to aggregate car ads from multiple sources.
+  * Built a real-time notification engine to boost user engagement and satisfaction
+  * Implemented CI/CD pipelines to ensure seamless deployments and maintain system reliability
+
+* Pivony: Data Scientist (Apr 2021 - Sep 2021)
+  * Created a BERT-based semantic search tool for customer feedback retrieval, improving user experience and data accessibility.
+  * Built a Turkish NER system to extract location data from user reviews, supporting municipal decision-making.
+  * Used LDA and n-gram models for visualizing sentiment trends, empowering businesses with actionable insights.
   
 Skills
 ======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
+* Languages: Python, R, JavaScript, Bash, Scala
+* Technical Skills: : Large Language Modeling and Pre-training, Supervised Fine Tuning, Deep Learning, Machine Learning, Deep Learning, Natural Language Processing, Model Deployment, Model APls
+* Tools: Numpy, Pandas, PyTorch, Transformers, Langchain, Scikit-Learn, Matplotlib, XGBoost, OpenCV, Huggingface, Git, Pytest, NLTK, SpaCy, Flask, Kubernetes, Docker, GIT, Airflow, AWS, GCP, Django, PostGreSQL
 
-Publications
-======
-  <ul>{% for post in site.publications reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
-Talks
-======
-  <ul>{% for post in site.talks reversed %}
-    {% include archive-single-talk-cv.html  %}
-  {% endfor %}</ul>
-  
-Teaching
-======
-  <ul>{% for post in site.teaching reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
-Service and leadership
-======
-* Currently signed in to 43 different slack teams
+
