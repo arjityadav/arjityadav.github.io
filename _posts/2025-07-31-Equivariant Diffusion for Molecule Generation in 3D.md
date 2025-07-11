@@ -1,6 +1,6 @@
 ---
 title: "Equivariant Diffusion for Molecule Generation in 3D"
-date: 2024-11-12
+date: 2025-07-31
 permalink: /blog/2025-07-31-Equivariant-Diffusion-for-Molecule-Generation-in-3D
 ---
 
