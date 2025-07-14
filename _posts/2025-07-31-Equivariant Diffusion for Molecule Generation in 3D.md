@@ -5,7 +5,6 @@ permalink: /blog/2025-07-31-Equivariant-Diffusion-for-Molecule-Generation-in-3D
 ---
 
 ---
-### 🧠 Introduction: Deep Learning Meets Molecular Sciences
 
 The fusion of artificial intelligence and molecular sciences is rapidly transforming our ability to understand and design complex chemical systems. With advances like AlphaFold revolutionizing protein folding prediction, the next frontier lies in **generative models for molecules**, especially in three dimensions. The geometric conformation of molecules plays a crucial role in determining their chemical and biological properties. Thus, generating **valid 3D molecular structures** with machine learning is not only scientifically interesting but also practically vital for drug discovery and material science.
 
