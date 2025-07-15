@@ -68,7 +68,9 @@ The process consists of:
 
 Mathematically, the forward noising process is:
 
-\[ q(z_t | x) = \mathcal{N}(z_t | \alpha_t x, \sigma_t^2 I) \]
+$$
+z_t = \alpha_t [x, h] + \sigma_t \epsilon
+$$
 
 The reverse process learns to predict the clean signal or the noise directly:
 
