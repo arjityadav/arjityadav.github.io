@@ -84,9 +84,9 @@ These properties make diffusion models especially suited for **3D generative tas
 
 In the **forward diffusion process**, both coordinates \( x \) and atom features \( h \) are gradually noised:
 
-\[
+$$
 z_t = \alpha_t [x, h] + \sigma_t \epsilon
-\]
+$$
 
 where:
 - \( \alpha_t \) controls the retained signal,
