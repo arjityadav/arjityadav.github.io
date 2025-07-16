@@ -157,7 +157,7 @@ framework.
 require an ordering of atoms, making them well-suited for permutation-invariant tasks
 like molecule generation.
 - Likelihood Computation : A well-defined variational lower bound allows us to evaluate
-how likely a generated molecule is, an essential feature in scientific and industrial
+how likely a generated molecule is, an essential feature in scientific and industrial9
 applications.
 
 ### 3.3 The Noising and Denoising Processes
@@ -576,7 +576,7 @@ These are important features in scientific applications, where confidence in res
 
 ### 7.2 Limitations
 
-⚠ **Sampling Speed**
+⚠️ **Sampling Speed**
 One of the most common criticisms of diffusion models in general—and EDM is no
 exception—is that **sampling is slow**. Each molecule requires **hundreds of denoising steps**
 from Gaussian noise to reach a stable conformation. This can make large-scale generation or
@@ -584,7 +584,7 @@ real-time applications computationally expensive.
 While recent works like progressive distillation and fewer-step diffusion approximations offer
 some hope, EDM (as originally proposed) still requires **many iterations per sample**.
 
-⚠ **Unbounded Likelihoods**
+⚠️ **Unbounded Likelihoods**
 Although EDM supports likelihood estimation, it’s worth noting that **negative log-likelihood
 (NLL)** is not always well-defined for continuous data when evaluated directly. As the model
 becomes sharper, the likelihood can go to infinity in theory—even when sample quality remains
@@ -592,13 +592,13 @@ excellent.
 This makes NLL a somewhat tricky metric and underscores the need to use **multiple
 evaluation criteria** (e.g., stability, validity, distance metrics) when judging molecular models.
 
-⚠ **Failure Modes**
+⚠️ **Failure Modes**
 Despite impressive overall performance, EDM can occasionally generate:
 - **Disconnected components** (i.e., isolated atoms)
 - **Unrealistically long rings** or **strained geometries**
 These are rare but worth noting, especially in high-throughput settings.
 
-⚠ **Conditional Gap**
+⚠️ **Conditional Gap**
 
 
 While EDM supports conditional generation, the **alignment between the target property and
@@ -608,7 +608,7 @@ like dipole moments or energy.
 This suggests there’s room for improvement in **conditioning mechanisms** or **property-driven
 loss functions**.
 
-⚠ **Metric Reliability**
+⚠️ **Metric Reliability**
 Common validity metrics (e.g., RDKit-based valency checks) can sometimes be misleading. The
 paper argues that **stability metrics** (based on predicted bond valency) provide a better
 estimate of chemical correctness. Still, **evaluation in 3D is hard** , and more robust, physically
