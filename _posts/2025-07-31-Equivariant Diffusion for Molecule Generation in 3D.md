@@ -123,197 +123,171 @@ In the next section, we’ll dive deeper into **equivariance**—what it means, 
 
 ## 4. Equivariance: Geometry-Aware Learning
 
-When generating molecules in 3D, it’s not enough for models to just “work”—they need to
-**respect the geometry of the real world**. This is where the concepts of **equivariance** and
-**invariance** come into play. These aren’t just mathematical curiosities—they’re foundational
-principles that dictate whether a model will generate molecules that make physical sense.
+### Equivariance vs. Invariance
 
-### 4.1 Understanding Equivariance and Invariance
+When dealing with 3D molecular data, two key concepts emerge: **invariance** and **equivariance**.
 
-Let’s start with definitions.
-- **Invariance** means that a function or distribution doesn’t change when the input is
-transformed. For example, the _likelihood_ of a molecule should remain the same whether
-the molecule is rotated or translated. This is crucial for modeling real-world molecules,
-where position and orientation are arbitrary.
-- **Equivariance** , on the other hand, means that the _output_ of a function changes in the
-same way as its input. Mathematically, a function fff is equivariant to a transformation
-RRR if:
-f(Rx)=Rf(x)f(Rx) = Rf(x)f(Rx)=Rf(x)
-In our context, this means that if a molecule is rotated before being passed into the model, the
-generated output should rotate in exactly the same way. This ensures that the **model’s**
+- **Invariance** means the output stays the same regardless of transformations. For example, the *likelihood* of a molecule should remain unchanged if the molecule is rotated or translated.
+- **Equivariance** means the output changes *in the same way* as the input. Formally, a function \( f \) is equivariant under transformation \( R \) if:
 
+\[
+f(Rx) = Rf(x)
+\]
 
-**behavior is consistent under geometric transformations** , a critical requirement for accurate
-3D generation.
+In molecular generation, **equivariance is crucial**. If a model receives a rotated molecule, its output should also be rotated the same way—not fixed arbitrarily.
 
-### 4.2 Why Equivariance Matters in Molecule Generation
+### Why Equivariance Matters in Molecule Generation
 
-Real molecules don’t have a fixed orientation in space. Whether you rotate a benzene ring or
-translate a protein side chain, its chemical identity doesn’t change. If a generative model fails to
-account for this, it will learn spurious correlations based on the arbitrary positioning of molecules
-in the training data.
-This leads to two major problems:
+Molecules don’t have an intrinsic coordinate system. Their chemical identity remains the same regardless of spatial orientation. Models that ignore this symmetry:
 
-1. **Wasted Model Capacity** : The model wastes effort trying to memorize orientations
-    instead of learning meaningful chemical relationships.
-2. **Poor Generalization** : A molecule rotated slightly might be treated as entirely different,
-    reducing sample diversity and increasing error.
-By enforcing **E(3) equivariance** —equivariance to the full group of 3D translations, rotations,
-and reflections—models like **EDM** can learn true physical patterns rather than
-coordinate-specific quirks.
+- Waste capacity memorizing arbitrary coordinate alignments
+- Struggle to generalize to new orientations or datasets
+- Risk producing physically meaningless outputs
 
-### 4.3 How EDM Achieves Equivariance
+By designing models that are **equivariant under the E(3) group** (i.e., 3D rotations, translations, reflections), we ensure that the generation process respects **real-world geometry**.
 
-EDM (Equivariant Diffusion Model) is carefully designed to be equivariant by construction.
-Here’s how it handles key components:
-**a) Point Clouds and Features**
+### How EDM Achieves Equivariance
+
+EDM is built from the ground up to be **E(3)-equivariant**. Here's how:
+
+#### 🔹 Center-of-Gravity Constraint
+
+To preserve **translational invariance**, EDM keeps the center of mass of the molecule fixed during training and sampling. This avoids mathematical issues related to unnormalizable distributions over unconstrained space.
+
+#### 🔹 Feature Representation
+
+- **Coordinates** \( x \): Equivariant — they move under transformations.
+- **Atom types & charges** \( h \): Invariant — they stay the same.
+
+This separation ensures that the model learns how geometry and identity interact meaningfully.
+
+#### 🔹 Equivariant Neural Architecture (EGNN)
+
+EDM uses an **E(n)-Equivariant Graph Neural Network (EGNN)** that:
+
+- Computes messages using interatomic distances and relative vectors.
+- Updates features and coordinates while preserving equivariance.
+- Applies **fully-connected graphs** with pairwise interactions.
+
+This ensures that all geometric transformations of the input are matched by equivalent transformations of the output.
+
+#### 🔹 Equivariant Noise Prediction
+
+Because both the noise and the data live in 3D space, EDM’s noise prediction network must also be equivariant. This guarantees that denoising steps produce physically consistent outputs at every timestep.
+
+### Benefits of Equivariance
+
+By enforcing equivariance, EDM gains several key advantages:
+
+- ✅ **Robust generalization** across unseen orientations and configurations
+- ✅ **Efficient learning** from fewer data points
+- ✅ **Physically valid** 3D structures that match real molecular behavior
+
+In short, **equivariance is not optional**—it’s foundational to building generative models that operate in 3D space with scientific reliability.
+
+---
+
+In the next section, we’ll explore the full architecture of EDM: how molecules are represented, how the diffusion and reverse processes are constructed, and how equivariant neural networks power the denoising model.
+
+## 5. E(3) Equivariant Diffusion Models (EDMs): Methodology
+
+With the theory of diffusion and equivariance in place, we now explore how the **Equivariant Diffusion Model (EDM)** actually works. It combines a **score-based diffusion process** with a **geometrically structured neural network** to generate 3D molecules from noise.
+
+---
+
+### 5.1 Input Representation
+
 Each molecule is represented as:
-- A set of 3D atom coordinates x∈RM×3x \in \mathbb{R}^{M \times 3}x∈RM×
-- A set of atom-level features (like types and charges) h∈RM×nfh \in \mathbb{R}^{M
-\times n_f}h∈RM×nf
-Coordinates transform under rotations and translations, while features like atom type are
-**invariant**.
-**b) Center of Gravity Constraint**
-To ensure **translational invariance** , EDM works in a subspace where the **center of gravity is
-fixed to zero**. This avoids the mathematical pitfall that a translation-invariant distribution over all
-space can't be normalized.
+- A set of **3D coordinates** \( x \in \mathbb{R}^{M \times 3} \), where \( M \) is the number of atoms.
+- A set of **atom-level features** \( h \in \mathbb{R}^{M \times n_f} \), including one-hot encodings of atom types and integer charges.
 
+The model also learns to sample the **number of atoms \( M \)** from a categorical distribution estimated from the training set.
 
-Both the **noising** and **denoising** processes are defined in this subspace. At each step, the
-center of gravity is subtracted from coordinates, maintaining the validity of the probabilistic
-framework.
-**c) Equivariant Neural Networks (EGNNs)**
-The heart of EDM is the **E(n) Equivariant Graph Neural Network (EGNN)**. This architecture
-ensures that:
-- Messages between atoms depend on relative positions (which are rotation-invariant)
-- Coordinate updates are based on **vector differences** , preserving geometric
-relationships
-- All updates to both positions and features respect E(3) equivariance
-In each layer of an EGNN, the atom coordinates and features are updated using **equivariant
-convolutional layers (EGCLs)**. These layers ensure that the network’s output transforms
-consistently with its input under any E(3) transformation.
-**d) Equivariant Noise Prediction**
-The denoising network in EDM predicts the noise added at each time step. If the input is
-rotated, the predicted noise must rotate accordingly. Because the network itself is equivariant,
-this property holds automatically.
-This equivariant structure ensures that the **reverse diffusion process** (which generates new
-molecules) is consistent with the geometric nature of molecular data.
-
-### 4.4 Equivariance Enables Robust Generation
-
-Thanks to equivariance, EDMs offer several practical advantages:
-- **Robust Generalization** : Models don’t overfit to arbitrary orientations
-- **Sample Efficiency** : Less data is needed to learn rotationally consistent features
-- **Stable Molecules** : Generated conformations better match physical chemistry
-In essence, equivariance isn't just a desirable property—it’s a **necessary ingredient** for
-modeling physical systems. Without it, generative models risk producing unrealistic structures or
-failing to generalize to new molecules.
-
-
-## 5. E(3) Equivariant Diffusion Models (EDMs):
-
-## Methodology
-
-With the groundwork laid—understanding the problem space, the diffusion model framework,
-and the role of equivariance—we can now dive into the heart of this paper: the **E(3) Equivariant
-Diffusion Model (EDM)** for molecule generation in 3D. EDM is a generative model that
-combines **score-based diffusion** with **equivariant graph neural networks** , enabling it to
-produce physically valid molecules with both structural and chemical integrity.
-Let’s break down how EDM works, from input representation to training objectives.
-
-### 5.1 Input Representation: What Does EDM Model?
-
-The EDM model operates on a set of atoms forming a molecule, which consists of two types of
-information:
-- **Continuous features** : 3D coordinates of atoms, represented as a matrix x∈RM×3x \in
-\mathbb{R}^{M \times 3}x∈RM×3, where MMM is the number of atoms.
-- **Categorical features** : Atom types (e.g., H, C, N, O, F) and charges, represented as
-h∈RM×nfh \in \mathbb{R}^{M \times n_f}h∈RM×nf , often encoded as one-hot vectors
-plus integer charge values.
-A key challenge in modeling this data is that **coordinates are equivariant** under
-transformations (they move with rotations/translations), while **atom types are invariant**. EDM
-handles both consistently within the same framework.
-Additionally, the number of atoms MMM is sampled from a categorical distribution learned from
-the training data, allowing the model to generate variable-sized molecules.
+---
 
 ### 5.2 The Diffusion Process
 
-As with all diffusion models, EDM involves two processes:
-**a) Forward Process (Noising)**
-Noise is added to the molecule over TTT time steps. The noised latent variables are:
-zt=[zt(x),zt(h)]=αt[x,h]+σtεz_t = [z^{(x)}_t, z^{(h)}_t] = \alpha_t [x, h] + \sigma_t
-\epsilonzt =[zt(x) ,zt(h) ]=αt [x,h]+σt ε
+#### 🌀 Forward Process (Noising)
 
+Noise is added to both \( x \) and \( h \) over time:
 
-- αt\alpha_tαt controls how much signal remains
-- σt\sigma_tσt controls the noise level
-- ε∼N(0,I)\epsilon \sim \mathcal{N}(0, I)ε∼N(0,I) is Gaussian noise
-To maintain **translational invariance** , EDM defines the coordinate noise in a
-**zero-center-of-gravity subspace**. This ensures that the distribution integrates to one, which is
-not possible with a translation-invariant Gaussian over all of R3\mathbb{R}^3R3.
-**b) Reverse Process (Denoising)**
-The model learns to reverse the noising process by predicting the noise added at each step. A
-neural network φ\phiφ estimates ε^=φ(zt,t)\hat{\epsilon} = \phi(z_t, t)ε^=φ(zt ,t), which is then
-used to compute the denoised molecule:
-[x^,h^]=zt−σtε^αt[x̂, ĥ] = \frac{z_t - \sigma_t \hat{\epsilon}}{\alpha_t}[x^,h^]=αt zt −σt ε^
-This reverse process is iterated from t=Tt = Tt=T down to t=0t = 0t=0, gradually transforming
-noise into a structured 3D molecule.
+\[
+z_t = \alpha_t [x, h] + \sigma_t \cdot \epsilon
+\]
 
-### 5.3 The Neural Architecture: EGNN
+- \( \alpha_t \): scales signal
+- \( \sigma_t \): scales noise
+- \( \epsilon \sim \mathcal{N}(0, I) \): Gaussian noise
 
-At the core of EDM is an **E(n) Equivariant Graph Neural Network (EGNN)**. Here's how it
-works:
-- Each atom is a node in a fully connected graph.
-- Node features include atom type, charge, and timestep information.
-- Edge messages are computed using node features and inter-atomic distances.
-- Coordinate updates use relative vectors xi−xjx_i - x_jxi −xj , preserving rotational and
-translational equivariance.
-EGNN layers are made of:
-- **φₑ** : Encodes edge interactions
-- **φ** : Updates node features
+To maintain **translational invariance**, all coordinates are projected to a **zero center-of-gravity (CoG) subspace**.
 
+#### 🔄 Reverse Process (Denoising)
 
-- **φₓ** : Computes coordinate adjustments
-All components are fully connected neural networks, and their design ensures
-**E(3)-equivariance is preserved throughout**.
+A neural network \( \phi \) learns to predict the noise added at each step:
 
-### 5.4 Optimization Objective
+\[
+[x̂, \hat{h}] = \frac{z_t - \sigma_t \cdot \phi(z_t, t)}{\alpha_t}
+\]
 
-Training is done by minimizing a **variational lower bound** on the log-likelihood of the data. The
-main loss term at each timestep ttt is:
-Lt=Eε∼N(0,I)[12∥ε−ε^∥2]L_t = \mathbb{E}_{\epsilon \sim \mathcal{N}(0, I)} \left[ \frac{1}{2}
-\|\epsilon - \hat{\epsilon}\|^2 \right]Lt =Eε∼N(0,I) [21 ∥ε−ε^∥2]
-This is a simple L2 loss between the true and predicted noise. Additional terms include:
-- **L** ₀: Likelihood of the original data given the denoised sample z0z_0z
-- **L_base** : KL divergence from the final noised distribution to a standard Gaussian
-In practice, LtL_tLt dominates training and performs well when the weighting factor w(t)w(t)w(t)
-is set to 1 (even though the theory suggests a time-dependent weight based on the
-signal-to-noise ratio).
+This process is repeated from timestep \( T \) back to \( 0 \), transforming noise into a valid molecule.
 
-### 5.5 Handling Categorical Features
+---
 
-EDM uses **one-hot encoding** for atom types, and models them using a **Gaussian noise
-process** —just like continuous data. This unified approach allows the network to jointly denoise
-atom types and coordinates, rather than treating them as separate streams.
-A clever trick ensures discrete values are recovered correctly: the network learns to predict
-noisy one-hot vectors, which are later interpreted via categorical distributions.
-Empirically, **scaling** features—e.g., using 0.25 for one-hot vectors and 0.1 for charges—helps
-the model first infer rough 3D positions before refining the chemical types. This matches how
-humans often think: "place atoms first, then decide what they are."
+### 5.3 E(n) Equivariant Graph Neural Network (EGNN)
 
-### 5.6 A Unified Probabilistic Framework
+The network \( \phi \) is implemented as a stack of **EGNN layers**, which maintain E(3)-equivariance throughout:
 
+- Atoms are treated as nodes in a **fully connected graph**.
+- Edges are defined using **pairwise distances**.
+- Updates are computed using:
+  - **φₑ**: edge feature update
+  - **φₕ**: node feature update
+  - **φₓ**: coordinate update using relative vectors \( x_i - x_j \)
 
-Unlike many generative models, EDM is fully probabilistic. It allows:
-- **Likelihood computation** : Useful for model evaluation and comparison
-- **Sampling with uncertainty** : Enables multiple valid conformers
-- **Conditional generation** : Molecules can be generated to match target properties like
-energy, charge, or polarizability
-In short, EDM elegantly fuses **geometric awareness** , **probabilistic reasoning** , and **deep
-learning** into a single, powerful framework for generating molecules directly in 3D.
-In the next section, we’ll explore how EDM performs in practice—how it compares to existing
-models, what kinds of molecules it generates, and how it scales to real-world datasets like QM
-and GEOM-Drugs.
+This design ensures that both node features and positions transform appropriately under any 3D rotation, reflection, or translation.
+
+---
+
+### 5.4 Training Objective
+
+The main loss used during training is the **mean squared error** between the true noise \( \epsilon \) and the predicted noise \( \hat{\epsilon} \):
+
+\[
+L_t = \mathbb{E} \left[ \frac{1}{2} \left\| \epsilon - \hat{\epsilon}(z_t, t) \right\|^2 \right]
+\]
+
+There are also additional likelihood terms:
+- **L₀**: Measures how well the model reconstructs the original data
+- **L_base**: KL divergence from the final noised state to standard Gaussian
+
+In practice, the simple \( L_t \) term dominates and performs well with constant weighting.
+
+---
+
+### 5.5 Modeling Categorical Features (Atom Types)
+
+Atom types are:
+- Represented using **one-hot vectors**
+- Noised using the **same Gaussian scheme** as coordinates
+- Denoised via the same network \( \phi \)
+
+A key trick is to **scale feature noise lower than coordinate noise**, which encourages the network to first learn structure and then refine chemical identity. This mirrors chemical intuition: atoms arrange in space, then specialize in function.
+
+---
+
+### 5.6 Probabilistic Framework
+
+EDM is a **fully probabilistic model**, which enables:
+
+- ✅ **Exact likelihood estimation**
+- ✅ **Uncertainty quantification**
+- ✅ **Conditional generation** (e.g., molecules with specific energy or polarizability)
+
+Unlike heuristic or graph-based methods, EDM provides a **principled generative framework** grounded in probability theory and geometric symmetry.
+
+---
+
+In the next section, we’ll examine how EDM performs in practice—on benchmark datasets and across multiple evaluation metrics—and how it compares to other state-of-the-art generative models.
 
 ## 6. Evaluation & Results
 
