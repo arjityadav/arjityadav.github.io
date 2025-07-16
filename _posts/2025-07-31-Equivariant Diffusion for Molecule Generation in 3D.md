@@ -4,7 +4,7 @@ date: 2025-07-31
 permalink: /blog/2025-07-31-Equivariant-Diffusion-for-Molecule-Generation-in-3D
 ---
 
-
+---
 ## 1. Introduction
 
 In recent years, deep learning has revolutionized how we approach problems in molecular
