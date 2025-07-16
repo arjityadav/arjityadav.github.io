@@ -60,91 +60,66 @@ This is exactly the gap that **Equivariant Diffusion Models (EDMs)** aim to fill
 
 ## 3. Diffusion Models in Generative Learning
 
-Generative modeling has seen explosive progress in recent years, especially with the rise of
-**diffusion models**. Initially developed for applications like image synthesis and audio
-generation, diffusion models are now proving to be powerful tools for molecule
-generation—particularly in 3D, where structure, symmetry, and physical plausibility are
-paramount.
+### What is a Diffusion Model?
 
-### 3.1 What is a Diffusion Model?
+A diffusion model learns to generate data by **reversing a noise process**. The core idea is simple: start with a real data point (like a molecule), progressively add Gaussian noise until it becomes indistinguishable from random noise, and then train a neural network to **reverse this process**, step by step, reconstructing the original data.
 
-At its core, a diffusion model learns to generate data by **reversing a noise process**. The idea is
-deceptively simple: take a real data point (say, a 3D molecule), add noise to it over many small
-steps until it's pure random noise, and then train a model to **undo that noise step by step** ,
-eventually recovering the original data.
-This two-part process involves:
-- **Forward Process (Diffusion)** : Gradually add Gaussian noise to the data over a series
-of time steps t=0t = 0t=0 to TTT, turning a clean data point into random noise.
-- **Reverse Process (Denoising)** : Train a neural network to reverse this process by
-learning to remove noise at each time step, effectively generating new data samples
-from scratch.
-The beauty of this framework lies in its **stability** and **training efficiency**. Unlike GANs (which
-often suffer from mode collapse) or VAEs (which sometimes generate blurry samples), diffusion
-models produce **high-quality, diverse samples** and offer a **tractable likelihood function** —a
-big plus for scientific applications.
+This consists of two stages:
 
-### 3.2 Why Use Diffusion for Molecule Generation?
+- **Forward Process (Diffusion)**: Adds noise gradually over a series of time steps \( t = 0 \) to \( T \), transforming structured data into pure noise.
+- **Reverse Process (Denoising)**: A neural network learns to remove the noise step-by-step, ultimately producing new data from noise.
 
-For molecules, diffusion models bring several advantages:
-- **Smooth Control over Generation** : Because the model generates a sample by
-denoising progressively from noise, it provides fine-grained control over the generation
-process, allowing for interpolation, editing, and conditioning.
+### Why Use Diffusion for Molecule Generation?
 
+Diffusion models have several advantages, especially for molecule generation:
 
+- 🧭 **Smooth, controllable generation**: Molecules emerge gradually, allowing fine-grained control and interpolation.
+- 🔄 **Unified treatment of data**: Both **continuous** (coordinates) and **discrete** (atom types) data can be handled together.
+- 🧱 **No need for atom ordering**: Unlike autoregressive models, diffusion models do not require an arbitrary sequence of atoms.
+- 📊 **Likelihood-based modeling**: They support well-defined probabilistic training and evaluation.
 
-- Unified Treatment of Data : Diffusion models can handle continuous variables (like 3D
-coordinates) and discrete variables (like atom types) within the same probabilistic
-framework.
-- Flexibility in Model Design : Unlike autoregressive models, diffusion models do not
-require an ordering of atoms, making them well-suited for permutation-invariant tasks
-like molecule generation.
-- Likelihood Computation : A well-defined variational lower bound allows us to evaluate
-how likely a generated molecule is, an essential feature in scientific and industrial9
-applications.
+These properties make diffusion models especially suited for **3D generative tasks**, where precision and flexibility are essential.
 
-### 3.3 The Noising and Denoising Processes
+### The Noising and Denoising Processes
 
-Let’s take a closer look at the mechanics.
-In the **forward diffusion process** , a molecule's atom positions xxx and atom types hhh are
-corrupted by adding Gaussian noise at each time step. This process continues until the data
-becomes indistinguishable from random noise. For example, for time step ttt, the noisy latent
-representation is given by:
-$$
-  \int_0^\infty \frac{x^3}{e^x-1}\,dx = \frac{\pi^4}{15}
-$$
+In the **forward diffusion process**, both coordinates \( x \) and atom features \( h \) are gradually noised:
 
-where αt\alpha_tαt and σt\sigma_tσt are scheduling parameters controlling the signal and noise
-levels, and ε∼N(0,I)\epsilon \sim \mathcal{N}(0, I)ε∼N(0,I) is standard Gaussian noise.
-In the **reverse process** , the model learns to predict this noise ε\epsilonε given a noisy input
-ztz_tzt. From this, the clean data point can be estimated, and the process is iterated backward
-from t=Tt = Tt=T to t=0t = 0t=0 to obtain a new molecule.
-The reverse process is **Markovian** , which means each step depends only on the previous one.
-This makes the generation procedure conceptually simple, though it can be computationally
-intensive due to the many steps involved.
+\[
+z_t = \alpha_t [x, h] + \sigma_t \epsilon
+\]
 
-### 3.4 Predicting Noise Instead of Data
+where:
+- \( \alpha_t \) controls the retained signal,
+- \( \sigma_t \) scales the noise,
+- \( \epsilon \sim \mathcal{N}(0, I) \) is Gaussian noise.
 
-A practical trick that improves both training and sample quality is to train the model to **predict
-the noise ε\epsilonε** added at each step, rather than the denoised data xxx itself. This
-simplification, introduced by Ho et al. (2020), leads to a cleaner optimization objective:
-Lt=Eε∼N(0,I)[12∥ε−ε^(zt,t)∥2]L_t = \mathbb{E}_{\epsilon \sim \mathcal{N}(0, I)} \left[ \frac{1}{2}
-\left\| \epsilon - \hat{\epsilon}(z_t, t) \right\|^2 \right]Lt =Eε∼N(0,I) [21 ∥ε−ε^(zt ,t)∥2]
+In the **reverse process**, the model predicts the added noise \( \epsilon \) using a network \( \phi \), enabling recovery of the original data:
 
+\[
+[x̂, \hat{h}] = \frac{z_t - \sigma_t \cdot \phi(z_t, t)}{\alpha_t}
+\]
 
-This is an **L2 loss** between the true noise and the predicted noise, and it's computed across all
-components—both spatial coordinates and discrete features—simultaneously.
+This process is iterated backward from \( t = T \) to \( t = 0 \), effectively generating a new molecule from noise.
 
-### 3.5 What’s Unique About Diffusion in 3D?
+### Predicting Noise Instead of Data
 
-Unlike images or audio, molecules exist in physical space and must obey **Euclidean
-symmetries**. The diffusion model must be adapted to operate on **point clouds with atom-level
-features** , and it must account for **rotational, translational, and reflectional symmetries**.
-This is where **Equivariant Diffusion Models (EDMs)** come in. By using **equivariant neural
-networks** and carefully designed noise processes, EDMs ensure that the generation respects
-these symmetries, which is essential for generating **physically valid molecules**.
-In the next section, we’ll explore what **equivariance** means in this context, how it differs from
-invariance, and why it’s a non-negotiable requirement for models that generate molecules in 3D
-space.
+A key trick introduced by earlier diffusion models (like DDPM) is to train the network to **predict noise** rather than the clean data directly. The training objective becomes a simple **L2 loss**:
+
+\[
+L_t = \mathbb{E}_{\epsilon \sim \mathcal{N}(0, I)} \left[ \frac{1}{2} \left\| \epsilon - \hat{\epsilon}(z_t, t) \right\|^2 \right]
+\]
+
+This formulation improves stability, simplifies training, and leads to better sample quality.
+
+### What’s Unique About Diffusion in 3D?
+
+Unlike images or sequences, **molecules live in 3D space** and must obey **Euclidean symmetries** (E(3): rotations, translations, reflections). A model that fails to account for these will learn artifacts tied to coordinate orientation.
+
+This is where **Equivariant Diffusion Models (EDMs)** shine: they combine the probabilistic power of diffusion with **geometric awareness**, ensuring that generation respects physical space and symmetry.
+
+---
+
+In the next section, we’ll dive deeper into **equivariance**—what it means, how it’s different from invariance, and why it’s non-negotiable in 3D molecular generation.
 
 ## 4. Equivariance: Geometry-Aware Learning
 
