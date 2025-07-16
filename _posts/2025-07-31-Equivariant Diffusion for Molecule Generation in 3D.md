@@ -18,82 +18,45 @@ This blog post explores the architecture, mathematical foundation, and empirical
 
 ## 2. The Problem Space: Challenges in 3D Molecular Generation
 
-At first glance, generating molecules might seem like simply connecting atoms in valid
-configurations. However, this task becomes dramatically more complex when we move from 2D
-molecular graphs to **3D structures**. The shift to three dimensions introduces a host of new
-challenges, many of which are rooted in the geometry and physics of real molecules.
+### Molecules Live in 3D
 
-### 2.1 Molecules Live in 3D
+Every molecule in the natural world exists in **three-dimensional space**. Its spatial arrangement—called the **conformation**—is not just a cosmetic detail; it's central to how the molecule behaves. Two molecules with identical atom connectivity can have vastly different properties if their atoms are arranged differently in space. For example, a small twist in a molecule’s backbone could determine whether a drug binds effectively to a protein or gets flushed out of the body without any effect.
 
-Every molecule in the natural world exists in **three-dimensional space**. Its spatial
-arrangement—called the **conformation** —is not just a cosmetic detail; it's central to how the
-molecule behaves. Two molecules with identical atom connectivity can have vastly different
-properties if their atoms are arranged differently in space. For example, a small twist in a
-molecule’s backbone could determine whether a drug binds effectively to a protein or gets
-flushed out of the body without any effect.
-Traditional molecule generation approaches often focus on **2D graph representations** , treating
-molecules as collections of atoms (nodes) and bonds (edges). While this is useful for encoding
-chemical rules like valency or bond order, it discards the crucial geometric information that
-governs molecular behavior. This makes 2D-only models ill-suited for tasks that depend on
-physical interactions, such as docking, solubility prediction, or material design.
+### Why 3D is Hard
 
-### 2.2 Why 3D is Hard
+Generating molecules directly in 3D space is much harder than working with 2D graphs. Here’s why:
 
-Generating molecules directly in 3D space is much harder than working with 2D graphs. Here’s
-why:
-- **Conformational Complexity** : A single molecule can have multiple low-energy
-conformations. Generating a single valid structure is already nontrivial; generating
-diverse, low-energy, and realistic conformers is even harder.
-- **Atomic Interactions** : The 3D positions of atoms must reflect valid chemical
-forces—bond lengths, angles, and torsions must fall within specific ranges, or else the
-molecule may be physically implausible.
-- **Combinatorial Explosion** : As the number of atoms increases, the space of valid 3D
-configurations grows exponentially. Exhaustively searching this space is computationally
-infeasible.
-- **Continuous + Discrete Data** : Molecule generation in 3D involves both **continuous
-variables** (atom positions) and **discrete variables** (atom types, charges). Modeling
-these together in a coherent, unified framework is a major challenge.
+- **Conformational Complexity**: A single molecule can have multiple low-energy conformations. Generating a single valid structure is already nontrivial; generating diverse, low-energy, and realistic conformers is even harder.
+- **Atomic Interactions**: The 3D positions of atoms must reflect valid chemical forces—bond lengths, angles, and torsions must fall within specific ranges, or else the molecule may be physically implausible.
+- **Combinatorial Explosion**: As the number of atoms increases, the space of valid 3D configurations grows exponentially. Exhaustively searching this space is computationally infeasible.
+- **Continuous + Discrete Data**: Molecule generation in 3D involves both **continuous variables** (atom positions) and **discrete variables** (atom types, charges). Modeling these together in a coherent, unified framework is a major challenge.
 
+### The Role of Symmetry in 3D Space
 
-### 2.3 The Role of Symmetry in 3D Space
+Another unique difficulty of 3D molecular generation is **geometric symmetry**. Molecules don't have a preferred orientation or position in space—they can be rotated, translated, or reflected, and remain chemically identical. These operations form the **Euclidean group in 3D**, denoted **E(3)**.
 
-Another unique difficulty of 3D molecular generation is **geometric symmetry**. Molecules don't
-have a preferred orientation or position in space—they can be rotated, translated, or reflected,
-and remain chemically identical. These operations form the **Euclidean group in 3D** , denoted
-**E(3)**.
-Any model that aims to generate molecules in 3D must respect these symmetries. If you rotate
-or shift a molecule and feed it into your model, the output should rotate or shift in the same way
-(this is called **equivariance** ), or in some cases, the output should remain unchanged
-( **invariance** ). Ignoring these symmetries leads to poor generalization, wasted model capacity,
-and samples that don’t reflect physical reality.
+Any model that aims to generate molecules in 3D must respect these symmetries. If you rotate or shift a molecule and feed it into your model, the output should rotate or shift in the same way (this is called **equivariance**), or in some cases, the output should remain unchanged (**invariance**). Ignoring these symmetries leads to poor generalization, wasted model capacity, and samples that don’t reflect physical reality.
 
-### 2.4 Existing Methods and Their Limitations
+### Existing Methods and Their Limitations
 
 Previous attempts at 3D molecule generation have largely fallen into two categories:
 
-1. **Autoregressive Models** : These generate one atom at a time in a fixed order. While
-    flexible, they require an arbitrary ordering of atoms, which introduces unnatural biases
-    and makes sampling slow and sequential.
-2. **Normalizing Flows** : These use invertible transformations to map noise into molecule
-    space. While elegant, they are computationally expensive—especially in 3D—and don’t
-    scale well to large molecules.
-Both approaches struggle to balance physical plausibility, scalability, and computational
-efficiency.
+1. **Autoregressive Models**: These generate one atom at a time in a fixed order. While flexible, they require an arbitrary ordering of atoms, which introduces unnatural biases and makes sampling slow and sequential.
+2. **Normalizing Flows**: These use invertible transformations to map noise into molecule space. While elegant, they are computationally expensive—especially in 3D—and don’t scale well to large molecules.
 
-### 2.5 What’s Needed?
+Both approaches struggle to balance physical plausibility, scalability, and computational efficiency.
+
+### What’s Needed?
 
 To tackle 3D molecule generation effectively, we need a model that:
+
 - Jointly handles **continuous and discrete features**
 - Respects **geometric symmetries** like those in E(3)
-- Produces **valid** , **diverse** , and **stable** molecules
+- Produces **valid**, **diverse**, and **stable** molecules
 - Scales to complex, drug-like molecules
 - Can be trained efficiently and evaluated probabilistically
 
-
-This is exactly the gap that **Equivariant Diffusion Models (EDMs)** aim to fill. By combining the
-strengths of **diffusion-based generation** with **equivariant neural networks** , EDMs offer a
-principled solution to generating 3D molecular structures with high fidelity and physical
-plausibility.
+This is exactly the gap that **Equivariant Diffusion Models (EDMs)** aim to fill. By combining the strengths of **diffusion-based generation** with **equivariant neural networks**, EDMs offer a principled solution to generating 3D molecular structures with high fidelity and physical plausibility.
 
 ## 3. Diffusion Models in Generative Learning
 
