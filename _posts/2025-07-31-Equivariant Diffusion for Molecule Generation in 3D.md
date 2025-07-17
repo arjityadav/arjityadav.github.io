@@ -102,7 +102,7 @@ In the **forward diffusion process** , a molecule's atom positions xxx and atom 
 
 $$z_t = \alpha_t [x, h] + \sigma_t \, \epsilon$$
 
-where $\alpha_t$ and $\sigma_t$ are scheduling parameters controlling the signal and noise levels, and _ε ~ N(0, I)_ is standard Gaussian noise.
+where $$\alpha_t$$ and $\sigma_t$ are scheduling parameters controlling the signal and noise levels, and _ε ~ N(0, I)_ is standard Gaussian noise.
 
 In the **reverse process** , the model learns to predict this noise $\epsilon$ given a noisy input $z_t$. From this, the clean data point can be estimated, and the process is iterated backward from _t = T_ to _t = 0_ to obtain a new molecule.
 
