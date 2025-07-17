@@ -8,14 +8,14 @@ permalink: /blog/2025-07-31-Equivariant-Diffusion-for-Molecule-Generation-in-3D
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
 </script>
 
-In recent years, deep learning has revolutionized how we approach problems in molecular science. From protein structure prediction breakthroughs like DeepMind’s AlphaFold to the design of novel materials and drugs, machine learning models are increasingly becoming indispensable tools in computational chemistry and biology. But while a great deal of progress has been made in analyzing and predicting molecular properties, generating entirely new molecules—particularly in **three dimensions** —remains a challenging frontier.
+In recent years, deep learning has revolutionized how we approach problems in molecular science. From protein structure prediction breakthroughs like DeepMind’s AlphaFold to the design of novel materials and drugs, machine learning models are increasingly becoming indispensable tools in computational chemistry and biology. But while a great deal of progress has been made in analyzing and predicting molecular properties, generating entirely new molecules-particularly in **three dimensions** -remains a challenging frontier.
 
 Why does 3D matter? Molecules are not just abstract graphs of atoms and bonds; they exist in **physical space**. Their 3D conformations determine how they interact with biological targets, bind to receptors, and exhibit chemical properties like reactivity and solubility. Capturing this spatial structure accurately is vital, especially for downstream applications like **drug discovery** , where the difference between a successful and failed candidate can hinge on subtle spatial interactions.
 
-Traditional molecule generation models have typically worked in **2D graph space** , representing molecules as nodes (atoms) and edges (bonds). While useful, this approach neglects crucial geometric information—like the actual positions of atoms in 3D space. More recent approaches have attempted to bridge this gap by predicting conformations after generating 2D molecules. However, these multi-step pipelines often introduce inaccuracies and fail to account for
+Traditional molecule generation models have typically worked in **2D graph space** , representing molecules as nodes (atoms) and edges (bonds). While useful, this approach neglects crucial geometric information-like the actual positions of atoms in 3D space. More recent approaches have attempted to bridge this gap by predicting conformations after generating 2D molecules. However, these multi-step pipelines often introduce inaccuracies and fail to account for
 **symmetries in physical space** , such as rotation or translation invariance.
 
-Enter the **Equivariant Diffusion Model (EDM)** : a novel approach that directly tackles the challenge of **generating 3D molecules** from scratch. EDMs leverage the power of **diffusion models** —a class of generative models that learn to reverse a noise process—to generate molecules as structured outputs. What makes EDMs particularly powerful is their built-in respect for **geometric symmetries** : they are _equivariant_ to Euclidean transformations, meaning that rotating or translating a molecule doesn't change its underlying structure inappropriately.
+Enter the **Equivariant Diffusion Model (EDM)** : a novel approach that directly tackles the challenge of **generating 3D molecules** from scratch. EDMs leverage the power of **diffusion models** -a class of generative models that learn to reverse a noise process-to generate molecules as structured outputs. What makes EDMs particularly powerful is their built-in respect for **geometric symmetries** : they are _equivariant_ to Euclidean transformations, meaning that rotating or translating a molecule doesn't change its underlying structure inappropriately.
 
 This blog post explores the architecture, mathematical foundation, and empirical performance of EDMs. We’ll begin by understanding the core challenges of 3D molecule generation, then dive into how equivariant diffusion models elegantly solve them, and finally examine their strengths, limitations, and potential for real-world applications in computational chemistry and drug design.
 
@@ -25,7 +25,7 @@ At first glance, generating molecules might seem like simply connecting atoms in
 
 ### 2.1 Molecules Live in 3D
 
-Every molecule in the natural world exists in **three-dimensional space**. Its spatial arrangement—called the **conformation** —is not just a cosmetic detail; it's central to how the molecule behaves. Two molecules with identical atom connectivity can have vastly different properties if their atoms are arranged differently in space. For example, a small twist in a molecule’s backbone could determine whether a drug binds effectively to a protein or gets flushed out of the body without any effect.
+Every molecule in the natural world exists in **three-dimensional space**. Its spatial arrangement-called the **conformation** -is not just a cosmetic detail; it's central to how the molecule behaves. Two molecules with identical atom connectivity can have vastly different properties if their atoms are arranged differently in space. For example, a small twist in a molecule’s backbone could determine whether a drug binds effectively to a protein or gets flushed out of the body without any effect.
 
 Traditional molecule generation approaches often focus on **2D graph representations** , treating molecules as collections of atoms (nodes) and bonds (edges). While this is useful for encoding chemical rules like valency or bond order, it discards the crucial geometric information that governs molecular behavior. This makes 2D-only models ill-suited for tasks that depend on physical interactions, such as docking, solubility prediction, or material design.
 
@@ -37,13 +37,13 @@ why:
 - **Conformational Complexity** : A single molecule can have multiple low-energy
   conformations. Generating a single valid structure is already nontrivial; generating diverse, low-energy, and realistic conformers is even harder.
 - **Atomic Interactions** : The 3D positions of atoms must reflect valid chemical
-  forces—bond lengths, angles, and torsions must fall within specific ranges, or else the molecule may be physically implausible.
+  forces-bond lengths, angles, and torsions must fall within specific ranges, or else the molecule may be physically implausible.
 - **Combinatorial Explosion** : As the number of atoms increases, the space of valid 3D configurations grows exponentially. Exhaustively searching this space is computationally infeasible.
 - **Continuous + Discrete Data** : Molecule generation in 3D involves both **continuous variables** (atom positions) and **discrete variables** (atom types, charges). Modeling these together in a coherent, unified framework is a major challenge.
 
 ### 2.3 The Role of Symmetry in 3D Space
 
-Another unique difficulty of 3D molecular generation is **geometric symmetry**. Molecules don't have a preferred orientation or position in space—they can be rotated, translated, or reflected, and remain chemically identical. These operations form the **Euclidean group in 3D** , denoted **E(3)**.
+Another unique difficulty of 3D molecular generation is **geometric symmetry**. Molecules don't have a preferred orientation or position in space-they can be rotated, translated, or reflected, and remain chemically identical. These operations form the **Euclidean group in 3D** , denoted **E(3)**.
 
 Any model that aims to generate molecules in 3D must respect these symmetries. If you rotate or shift a molecule and feed it into your model, the output should rotate or shift in the same way (this is called **equivariance** ), or in some cases, the output should remain unchanged ( **invariance** ). Ignoring these symmetries leads to poor generalization, wasted model capacity, and samples that don’t reflect physical reality.
 
@@ -52,7 +52,7 @@ Any model that aims to generate molecules in 3D must respect these symmetries. I
 Previous attempts at 3D molecule generation have largely fallen into two categories:
 
 1. **Autoregressive Models** : These generate one atom at a time in a fixed order. While flexible, they require an arbitrary ordering of atoms, which introduces unnatural biases and makes sampling slow and sequential.
-2. **Normalizing Flows** : These use invertible transformations to map noise into molecule space. While elegant, they are computationally expensive—especially in 3D—and don’t scale well to large molecules.
+2. **Normalizing Flows** : These use invertible transformations to map noise into molecule space. While elegant, they are computationally expensive-especially in 3D-and don’t scale well to large molecules.
 
 Both approaches struggle to balance physical plausibility, scalability, and computational efficiency.
 
@@ -70,7 +70,7 @@ This is exactly the gap that **Equivariant Diffusion Models (EDMs)** aim to fill
 
 ## 3. Diffusion Models in Generative Learning
 
-Generative modeling has seen explosive progress in recent years, especially with the rise of **diffusion models**. Initially developed for applications like image synthesis and audio generation, diffusion models are now proving to be powerful tools for molecule generation—particularly in 3D, where structure, symmetry, and physical plausibility are paramount.
+Generative modeling has seen explosive progress in recent years, especially with the rise of **diffusion models**. Initially developed for applications like image synthesis and audio generation, diffusion models are now proving to be powerful tools for molecule generation-particularly in 3D, where structure, symmetry, and physical plausibility are paramount.
 
 ### 3.1 What is a Diffusion Model?
 
@@ -81,7 +81,7 @@ This two-part process involves:
 - **Forward Process (Diffusion)** : Gradually add Gaussian noise to the data over a series of time steps _t=0_ to _T_, turning a clean data point into random noise.
 - **Reverse Process (Denoising)** : Train a neural network to reverse this process by learning to remove noise at each time step, effectively generating new data samples from scratch.
 
-The beauty of this framework lies in its **stability** and **training efficiency**. Unlike GANs (which often suffer from mode collapse) or VAEs (which sometimes generate blurry samples), diffusion models produce **high-quality, diverse samples** and offer a **tractable likelihood function** —a big plus for scientific applications.
+The beauty of this framework lies in its **stability** and **training efficiency**. Unlike GANs (which often suffer from mode collapse) or VAEs (which sometimes generate blurry samples), diffusion models produce **high-quality, diverse samples** and offer a **tractable likelihood function** -a big plus for scientific applications.
 
 ### 3.2 Why Use Diffusion for Molecule Generation?
 
@@ -98,23 +98,23 @@ For molecules, diffusion models bring several advantages:
 
 Let’s take a closer look at the mechanics.
 
-In the **forward diffusion process** , a molecule's atom positions xxx and atom types hhh are corrupted by adding Gaussian noise at each time step. This process continues until the data becomes indistinguishable from random noise. For example, for time step ttt, the noisy latent representation is given by:
+In the **forward diffusion process** , a molecule's atom positions _x_ and atom types _h_ are corrupted by adding Gaussian noise at each time step. This process continues until the data becomes indistinguishable from random noise. For example, for time step _t_, the noisy latent representation is given by:
 
 $$z_t = \alpha_t [x, h] + \sigma_t \, \epsilon$$
 
-where $$\alpha_t$$ and $\sigma_t$ are scheduling parameters controlling the signal and noise levels, and _ε ~ N(0, I)_ is standard Gaussian noise.
+where $$\alpha_t$$ and $$\sigma_t$$ are scheduling parameters controlling the signal and noise levels, and _ε ~ N(0, I)_ is standard Gaussian noise.
 
-In the **reverse process** , the model learns to predict this noise $\epsilon$ given a noisy input $z_t$. From this, the clean data point can be estimated, and the process is iterated backward from _t = T_ to _t = 0_ to obtain a new molecule.
+In the **reverse process** , the model learns to predict this noise $$\epsilon$$ given a noisy input $$z_t$$. From this, the clean data point can be estimated, and the process is iterated backward from _t = T_ to _t = 0_ to obtain a new molecule.
 
 The reverse process is **Markovian** , which means each step depends only on the previous one. This makes the generation procedure conceptually simple, though it can be computationally intensive due to the many steps involved.
 
 ### 3.4 Predicting Noise Instead of Data
 
-A practical trick that improves both training and sample quality is to train the model to **predict the noise ε\epsilonε** added at each step, rather than the denoised data xxx itself. This simplification, introduced by Ho et al. (2020), leads to a cleaner optimization objective:
+A practical trick that improves both training and sample quality is to train the model to **predict the noise ε** added at each step, rather than the denoised data _x_ itself. This simplification, introduced by Ho et al. (2020), leads to a cleaner optimization objective:
 
 $$\mathcal{L}_t = \mathbb{E}_{\epsilon \sim \mathcal{N}(0, I)} \left[ \frac{1}{2} \left\| \epsilon - \hat{\epsilon}(z_t, t) \right\|^2 \right]$$
 
-This is an **L2 loss** between the true noise and the predicted noise, and it's computed across all components—both spatial coordinates and discrete features—simultaneously.
+This is an **L2 loss** between the true noise and the predicted noise, and it's computed across all components-both spatial coordinates and discrete features-simultaneously.
 
 ### 3.5 What’s Unique About Diffusion in 3D?
 
@@ -126,7 +126,7 @@ In the next section, we’ll explore what **equivariance** means in this context
 
 ## 4. Equivariance: Geometry-Aware Learning
 
-When generating molecules in 3D, it’s not enough for models to just “work”—they need to **respect the geometry of the real world**. This is where the concepts of **equivariance** and **invariance** come into play. These aren’t just mathematical curiosities—they’re foundational principles that dictate whether a model will generate molecules that make physical sense.
+When generating molecules in 3D, it’s not enough for models to just “work”-they need to **respect the geometry of the real world**. This is where the concepts of **equivariance** and **invariance** come into play. These aren’t just mathematical curiosities-they’re foundational principles that dictate whether a model will generate molecules that make physical sense.
 
 ### 4.1 Understanding Equivariance and Invariance
 
@@ -147,7 +147,7 @@ This leads to two major problems:
 1. **Wasted Model Capacity** : The model wastes effort trying to memorize orientations instead of learning meaningful chemical relationships.
 2. **Poor Generalization** : A molecule rotated slightly might be treated as entirely different, reducing sample diversity and increasing error.
 
-By enforcing **E(3) equivariance** —equivariance to the full group of 3D translations, rotations, and reflections—models like **EDM** can learn true physical patterns rather than coordinate-specific quirks.
+By enforcing **E(3) equivariance** -equivariance to the full group of 3D translations, rotations, and reflections-models like **EDM** can learn true physical patterns rather than coordinate-specific quirks.
 
 ### 4.3 How EDM Achieves Equivariance
 
@@ -155,9 +155,9 @@ EDM (Equivariant Diffusion Model) is carefully designed to be equivariant by con
 **a) Point Clouds and Features**
 Each molecule is represented as:
 
-- A set of 3D atom coordinates $x \in \mathbb{R}^{M \times 3}$
+- A set of 3D atom coordinates $$x \in \mathbb{R}^{M \times 3}$$
 
-- A set of atom-level features (like types and charges) $h \in \mathbb{R}^{M \times n_f}$
+- A set of atom-level features (like types and charges) $$h \in \mathbb{R}^{M \times n_f}$$
 
 Coordinates transform under rotations and translations, while features like atom type are **invariant**.
 
@@ -190,13 +190,13 @@ Thanks to equivariance, EDMs offer several practical advantages:
 - **Sample Efficiency** : Less data is needed to learn rotationally consistent features
 - **Stable Molecules** : Generated conformations better match physical chemistry
 
-In essence, equivariance isn't just a desirable property—it’s a **necessary ingredient** for modeling physical systems. Without it, generative models risk producing unrealistic structures or failing to generalize to new molecules.
+In essence, equivariance isn't just a desirable property-it’s a **necessary ingredient** for modeling physical systems. Without it, generative models risk producing unrealistic structures or failing to generalize to new molecules.
 
 ## 5. E(3) Equivariant Diffusion Models (EDMs):
 
 ## Methodology
 
-With the groundwork laid—understanding the problem space, the diffusion model framework, and the role of equivariance—we can now dive into the heart of this paper: the **E(3) Equivariant Diffusion Model (EDM)** for molecule generation in 3D. EDM is a generative model that combines **score-based diffusion** with **equivariant graph neural networks** , enabling it to produce physically valid molecules with both structural and chemical integrity.
+With the groundwork laid-understanding the problem space, the diffusion model framework, and the role of equivariance-we can now dive into the heart of this paper: the **E(3) Equivariant Diffusion Model (EDM)** for molecule generation in 3D. EDM is a generative model that combines **score-based diffusion** with **equivariant graph neural networks** , enabling it to produce physically valid molecules with both structural and chemical integrity.
 
 Let’s break down how EDM works, from input representation to training objectives.
 
@@ -204,8 +204,8 @@ Let’s break down how EDM works, from input representation to training objectiv
 
 The EDM model operates on a set of atoms forming a molecule, which consists of two types of information:
 
-- **Continuous features** : 3D coordinates of atoms, represented as a matrix $x \in \mathbb{R}^{M \times 3}$ in , where _M_ is the number of atoms.
-- **Categorical features** : Atom types (e.g., H, C, N, O, F) and charges, represented as $h \in \mathbb{R}^{M \times n_f}$ , often encoded as one-hot vectors plus integer charge values.
+- **Continuous features** : 3D coordinates of atoms, represented as a matrix $$x \in \mathbb{R}^{M \times 3}$$ in , where _M_ is the number of atoms.
+- **Categorical features** : Atom types (e.g., H, C, N, O, F) and charges, represented as $$h \in \mathbb{R}^{M \times n_f}$$ , often encoded as one-hot vectors plus integer charge values.
 
 A key challenge in modeling this data is that **coordinates are equivariant** under transformations (they move with rotations/translations), while **atom types are invariant**. EDM handles both consistently within the same framework.
 Additionally, the number of atoms _M_ is sampled from a categorical distribution learned from the training data, allowing the model to generate variable-sized molecules.
@@ -221,17 +221,16 @@ $$
 z_t = [z_t(x), z_t(h)] = \alpha_t [x, h] + \sigma_t \, \epsilon
 $$
 
-- $\alpha_t$ controls how much signal remains
-- $\sigma_t$ controls the noise level
-- $\epsilon \sim \mathcal{N}(0, I)$
-  is Gaussian noise
+- $$\alpha_t$$ controls how much signal remains
+- $$\sigma_t$$ controls the noise level
+- $$\epsilon \sim \mathcal{N}(0, I)$$ is Gaussian noise
 
 To maintain **translational invariance** , EDM defines the coordinate noise in a
-**zero-center-of-gravity subspace**. This ensures that the distribution integrates to one, which is not possible with a translation-invariant Gaussian over all of $R^3$.
+**zero-center-of-gravity subspace**. This ensures that the distribution integrates to one, which is not possible with a translation-invariant Gaussian over all of $$R^3$$.
 
 **b) Reverse Process (Denoising)**
 
-The model learns to reverse the noising process by predicting the noise added at each step. A neural network $\phi$ estimates $\hat{\epsilon} = \phi(z_t, t)$,  
+The model learns to reverse the noising process by predicting the noise added at each step. A neural network $\phi$ estimates $$\hat{\epsilon} = \phi(z_t, t)$$,  
 which is then used to compute the denoised molecule:
 
 $$[\hat{x}, \hat{h}] = \frac{z_t - \sigma_t \hat{\epsilon}}{\alpha_t}$$
@@ -245,7 +244,7 @@ At the core of EDM is an **E(n) Equivariant Graph Neural Network (EGNN)**. Here'
 - Each atom is a node in a fully connected graph.
 - Node features include atom type, charge, and timestep information.
 - Edge messages are computed using node features and inter-atomic distances.
-- Coordinate updates use relative vectors $x_i - x_j$ , preserving rotational and translational equivariance. EGNN layers are made of:
+- Coordinate updates use relative vectors _$$x_i - x_j$$_ , preserving rotational and translational equivariance. EGNN layers are made of:
 - **φₑ** : Encodes edge interactions
 - **φ** : Updates node features
 - **φₓ** : Computes coordinate adjustments
@@ -263,18 +262,18 @@ $$
 
 This is a simple L2 loss between the true and predicted noise. Additional terms include:
 
-- **$L_0$** : Likelihood of the original data given the denoised sample z0z_0z
-- **$L_{\text{base}}$** : KL divergence from the final noised distribution to a standard Gaussian
+- **$$L_0$$** : Likelihood of the original data given the denoised sample $$z_{\text{0}}$$
+- **$$L_{\text{base}}$$** : KL divergence from the final noised distribution to a standard Gaussian
 
-In practice, _$L_t$_ dominates training and performs well when the weighting factor _w(t)_ is set to 1 (even though the theory suggests a time-dependent weight based on the signal-to-noise ratio).
+In practice, **$$L_{\text{t}}$$** dominates training and performs well when the weighting factor _w(t)_ is set to _1_ (even though the theory suggests a time-dependent weight based on the signal-to-noise ratio).
 
 ### 5.5 Handling Categorical Features
 
-EDM uses **one-hot encoding** for atom types, and models them using a **Gaussian noise process** —just like continuous data. This unified approach allows the network to jointly denoise atom types and coordinates, rather than treating them as separate streams.
+EDM uses **one-hot encoding** for atom types, and models them using a **Gaussian noise process** -just like continuous data. This unified approach allows the network to jointly denoise atom types and coordinates, rather than treating them as separate streams.
 
 A clever trick ensures discrete values are recovered correctly: the network learns to predict noisy one-hot vectors, which are later interpreted via categorical distributions.
 
-Empirically, **scaling** features—e.g., using 0.25 for one-hot vectors and 0.1 for charges—helps the model first infer rough 3D positions before refining the chemical types. This matches how humans often think: "place atoms first, then decide what they are."
+Empirically, **scaling** features-e.g., using 0.25 for one-hot vectors and 0.1 for charges-helps the model first infer rough 3D positions before refining the chemical types. This matches how humans often think: "place atoms first, then decide what they are."
 
 ### 5.6 A Unified Probabilistic Framework
 
@@ -286,7 +285,7 @@ Unlike many generative models, EDM is fully probabilistic. It allows:
 
 In short, EDM elegantly fuses **geometric awareness** , **probabilistic reasoning** , and **deep learning** into a single, powerful framework for generating molecules directly in 3D.
 
-In the next section, we’ll explore how EDM performs in practice—how it compares to existing models, what kinds of molecules it generates, and how it scales to real-world datasets like QM and GEOM-Drugs.
+In the next section, we’ll explore how EDM performs in practice-how it compares to existing models, what kinds of molecules it generates, and how it scales to real-world datasets like QM and GEOM-Drugs.
 
 ## 6. Evaluation & Results
 
@@ -311,7 +310,7 @@ The evaluation focuses on two key datasets:
 
 ### 6.2 Evaluation Metrics
 
-To assess performance, several metrics are used—each targeting different aspects of molecular quality:
+To assess performance, several metrics are used-each targeting different aspects of molecular quality:
 
 - **Negative Log-Likelihood (NLL)** : Measures how well the model captures the data distribution. Lower is better.
 - **Atom Stability** : Proportion of atoms that have chemically valid valency.
@@ -368,11 +367,11 @@ These metrics collectively evaluate chemical correctness, diversity, physical pl
 | **EDM (w/ H)** | **97.5**    | **94.3**             |
 | Ground Truth   | 97.7        | 97.7                 |
 
-Even with strict 3D bond derivation, EDM nearly matches the validity and uniqueness of real data—and **without sacrificing structural realism**.
+Even with strict 3D bond derivation, EDM nearly matches the validity and uniqueness of real data-and **without sacrificing structural realism**.
 
 ### 6.6 Conditional Generation
 
-EDM also supports **conditional molecule generation** —i.e., generating molecules that satisfy a specific property like polarizability or HOMO-LUMO gap.
+EDM also supports **conditional molecule generation** -i.e., generating molecules that satisfy a specific property like polarizability or HOMO-LUMO gap.
 
 In experiments conditioning on QM9 properties (like α, μ, HOMO, LUMO, heat capacity), EDM outperforms naive baselines and even outperforms models that rely only on molecule size. While there’s still a gap to ideal performance, the results show that **EDM successfully incorporates target properties into its generation process**.
 
@@ -392,7 +391,7 @@ In summary, EDM sets a new bar for 3D molecule generation:
 - It **scales to drug-like molecules** without architectural changes.
 - It supports **conditional and unconditional generation** with high-quality results.
 
-In the next section, we’ll step back and reflect on EDM’s broader **strengths, limitations, and open questions** —what it gets right, what could be improved, and where it fits in the future of molecular machine learning.
+In the next section, we’ll step back and reflect on EDM’s broader **strengths, limitations, and open questions** -what it gets right, what could be improved, and where it fits in the future of molecular machine learning.
 
 ## 7. Strengths and Limitations of EDM
 
@@ -401,7 +400,7 @@ The Equivariant Diffusion Model (EDM) represents a significant leap forward in 3
 ### 7.1 Strengths
 
 ✅ **E(3) Equivariance Built-In**
-One of EDM’s most important contributions is its **native support for E(3) symmetry** —the group of all 3D rotations, translations, and reflections. By embedding equivariance into the network and the diffusion process, EDM ensures that molecular outputs are physically meaningful and robust to arbitrary coordinate systems.
+One of EDM’s most important contributions is its **native support for E(3) symmetry** -the group of all 3D rotations, translations, and reflections. By embedding equivariance into the network and the diffusion process, EDM ensures that molecular outputs are physically meaningful and robust to arbitrary coordinate systems.
 
 This leads to:
 
@@ -438,12 +437,12 @@ These are important features in scientific applications, where confidence in res
 ### 7.2 Limitations
 
 ⚠️ **Sampling Speed**
-One of the most common criticisms of diffusion models in general—and EDM is no
-exception—is that **sampling is slow**. Each molecule requires **hundreds of denoising steps** from Gaussian noise to reach a stable conformation. This can make large-scale generation or real-time applications computationally expensive.
+One of the most common criticisms of diffusion models in general-and EDM is no
+exception-is that **sampling is slow**. Each molecule requires **hundreds of denoising steps** from Gaussian noise to reach a stable conformation. This can make large-scale generation or real-time applications computationally expensive.
 While recent works like progressive distillation and fewer-step diffusion approximations offer some hope, EDM (as originally proposed) still requires **many iterations per sample**.
 
 ⚠️ **Unbounded Likelihoods**
-Although EDM supports likelihood estimation, it’s worth noting that **negative log-likelihood (NLL)** is not always well-defined for continuous data when evaluated directly. As the model becomes sharper, the likelihood can go to infinity in theory—even when sample quality remains excellent.
+Although EDM supports likelihood estimation, it’s worth noting that **negative log-likelihood (NLL)** is not always well-defined for continuous data when evaluated directly. As the model becomes sharper, the likelihood can go to infinity in theory-even when sample quality remains excellent.
 
 This makes NLL a somewhat tricky metric and underscores the need to use **multiple
 evaluation criteria** (e.g., stability, validity, distance metrics) when judging molecular models.
@@ -466,7 +465,7 @@ Common validity metrics (e.g., RDKit-based valency checks) can sometimes be misl
 
 ## 8. Broader Impact and Future Directions
 
-The introduction of **Equivariant Diffusion Models (EDMs)** represents more than just a technical milestone—it’s a step toward **fundamentally rethinking how we design molecules computationally**. By uniting the physical symmetries of real molecules with the flexibility and scalability of modern deep learning, EDMs open up exciting new directions in **drug discovery** , **materials science** , and **generative chemistry**.
+The introduction of **Equivariant Diffusion Models (EDMs)** represents more than just a technical milestone-it’s a step toward **fundamentally rethinking how we design molecules computationally**. By uniting the physical symmetries of real molecules with the flexibility and scalability of modern deep learning, EDMs open up exciting new directions in **drug discovery** , **materials science** , and **generative chemistry**.
 
 Let’s explore the broader implications of this work and where the field might go next.
 
@@ -478,7 +477,7 @@ Designing new drug molecules typically takes years of experimentation and billio
 - **Property-guided design** , where molecules are conditioned to meet specific biological or pharmacokinetic targets
 - **Rapid conformer sampling** to explore molecular flexibility and binding modes
 
-Because EDM respects 3D spatial constraints and produces chemically stable, diverse molecules, it could serve as a **backbone for AI-driven drug pipelines**. It could, for example, generate candidate ligands directly in the binding pocket of a protein—something traditional 2D models cannot do realistically.
+Because EDM respects 3D spatial constraints and produces chemically stable, diverse molecules, it could serve as a **backbone for AI-driven drug pipelines**. It could, for example, generate candidate ligands directly in the binding pocket of a protein-something traditional 2D models cannot do realistically.
 
 ### 8.2 Materials Discovery and Molecular Design
 
@@ -529,14 +528,14 @@ Despite EDM’s strengths, several key challenges remain:
 
 ### 8.7 A Glimpse at the Future
 
-The real power of models like EDM lies in their potential to **act as scientific collaborators** : systems that don’t just predict, but create—guided by chemistry, grounded in physics, and accelerated by data. With continued advances in diffusion models, geometric deep learning, and molecular datasets, we may soon see generative models that:
+The real power of models like EDM lies in their potential to **act as scientific collaborators** : systems that don’t just predict, but create-guided by chemistry, grounded in physics, and accelerated by data. With continued advances in diffusion models, geometric deep learning, and molecular datasets, we may soon see generative models that:
 
 - Propose new molecules that have never been synthesized
 - Predict their properties with high accuracy
 - Suggest optimal conditions for synthesis
 - Adapt in real time based on feedback from experiments or simulations
 
-In that sense, EDMs aren’t just tools for molecule generation—they’re early steps toward
+In that sense, EDMs aren’t just tools for molecule generation-they’re early steps toward
 **AI-native molecular design**.
 
 ## 9. Conclusion
@@ -545,13 +544,13 @@ The **Equivariant Diffusion Model (EDM)** marks a powerful advancement in the fi
 
 In contrast to earlier approaches that relied on 2D graphs, autoregressive atom placement, or computationally expensive normalizing flows, EDM offers a **unified, scalable, and elegant framework**. It treats both **continuous atomic coordinates** and **discrete atom types** in a consistent probabilistic manner, while ensuring that the generation process respects the fundamental symmetries of physical space.
 
-From a performance standpoint, EDM delivers **state-of-the-art results** on standard datasets like QM9 and GEOM-Drugs, excelling in key metrics such as molecular stability, uniqueness, and log-likelihood. It also shows promising results in **conditional generation** , enabling the design of molecules with target properties—an essential capability for real-world applications in **drug discovery** , **materials science** , and beyond.
+From a performance standpoint, EDM delivers **state-of-the-art results** on standard datasets like QM9 and GEOM-Drugs, excelling in key metrics such as molecular stability, uniqueness, and log-likelihood. It also shows promising results in **conditional generation** , enabling the design of molecules with target properties-an essential capability for real-world applications in **drug discovery** , **materials science** , and beyond.
 
 Of course, challenges remain. Sampling speed, conditional fidelity, and synthesis-aware modeling are active areas for improvement. But the path forward is clear: EDM lays a solid foundation upon which **faster, smarter, and more versatile molecular generators** can be built.
 
-As machine learning continues to merge with the natural sciences, models like EDM represent a glimpse into a future where **molecular design is not only guided by data and simulation—but accelerated by intelligent, symmetry-aware generative systems**.
+As machine learning continues to merge with the natural sciences, models like EDM represent a glimpse into a future where **molecular design is not only guided by data and simulation-but accelerated by intelligent, symmetry-aware generative systems**.
 
-Whether you’re a computational chemist, a machine learning researcher, or a curious technologist, one thing is clear: **the future of molecular discovery is generative, geometric, and equivariant** —and EDM is leading the way.
+Whether you’re a computational chemist, a machine learning researcher, or a curious technologist, one thing is clear: **the future of molecular discovery is generative, geometric, and equivariant** -and EDM is leading the way.
 
 ---
 
@@ -562,5 +561,5 @@ Whether you’re a computational chemist, a machine learning researcher, or a cu
 
 ---
 
-🎓 _Presented by Arjit Yadav (3691856)_  
+🎓 _Blog by Arjit Yadav (3691856)_  
 _For feedback or questions, please raise an issue or pull request._
