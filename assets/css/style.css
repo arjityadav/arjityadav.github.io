@@ -1,0 +1,86 @@
+figure {
+    text-align: center;  /* Centers the figure container */
+  }
+  
+figcaption {
+    display: block;
+    text-align: center;
+    font-style: italic;
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+    width: 100%; /* Ensures it takes full width */
+  }
+
+  /* Increase H3 Size */
+h4 {
+  font-size: 0.95em;  /* Adjust size (default is smaller) */
+  
+}
+
+/* Increase H4 Size */
+h4 {
+  font-size: 0.95em;  /* Adjust size (default is smaller) */
+  
+}
+
+
+/* TOC Styling */
+#toc-container {
+  position: fixed;
+  right: 20px;
+  top: 100px;
+  width: 300px;
+  background: white;
+  padding: 10px; /* Less padding */
+  border-left: 3px solid black; /* Change border to black */
+  border-radius: 5px;
+  font-size: 14px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* TOC Header */
+#toc-container h2 {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 8px;
+  border-bottom: 1px solid black;
+  padding-bottom: 5px;
+  color: black; /* Change header text to black */
+}
+
+/* TOC List */
+#toc-container ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0; /* Remove extra margin */
+}
+
+/* TOC Items */
+#toc-container li {
+  margin: 3px 0; /* Reduce spacing */
+  padding: 3px;
+}
+
+#toc-container a {
+  text-decoration: none;
+  color: black; /* Change links to black */
+  font-weight: 500;
+  display: block;
+}
+
+/* Hover Effect */
+#toc-container li:hover {
+  background: #eaeaea;
+  border-radius: 3px;
+}
+
+/* Sub-items (H3) */
+#toc-container .toc-subitem {
+  margin-left: 12px; /* Slight indent for H3 items */
+  font-size: 13px;
+  font-weight: 400;
+}
