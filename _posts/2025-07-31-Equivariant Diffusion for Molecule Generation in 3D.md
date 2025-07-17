@@ -8,6 +8,11 @@ permalink: /blog/2025-07-31-Equivariant-Diffusion-for-Molecule-Generation-in-3D
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
 </script>
 
+<div id="toc-container">
+  <h2>Contents</h2>
+  <ul id="toc-list"></ul>
+</div>
+
 In recent years, deep learning has revolutionized how we approach problems in molecular science. From protein structure prediction breakthroughs like DeepMind’s AlphaFold to the design of novel materials and drugs, machine learning models are increasingly becoming indispensable tools in computational chemistry and biology. But while a great deal of progress has been made in analyzing and predicting molecular properties, generating entirely new molecules-particularly in **three dimensions** -remains a challenging frontier.
 
 Why does 3D matter? Molecules are not just abstract graphs of atoms and bonds; they exist in **physical space**. Their 3D conformations determine how they interact with biological targets, bind to receptors, and exhibit chemical properties like reactivity and solubility. Capturing this spatial structure accurately is vital, especially for downstream applications like **drug discovery** , where the difference between a successful and failed candidate can hinge on subtle spatial interactions.
@@ -230,7 +235,7 @@ To maintain **translational invariance** , EDM defines the coordinate noise in a
 
 **b) Reverse Process (Denoising)**
 
-The model learns to reverse the noising process by predicting the noise added at each step. A neural network $\phi$ estimates $$\hat{\epsilon} = \phi(z_t, t)$$,  
+The model learns to reverse the noising process by predicting the noise added at each step. A neural network $$\phi$$ estimates $$\hat{\epsilon} = \phi(z_t, t)$$,  
 which is then used to compute the denoised molecule:
 
 $$[\hat{x}, \hat{h}] = \frac{z_t - \sigma_t \hat{\epsilon}}{\alpha_t}$$
