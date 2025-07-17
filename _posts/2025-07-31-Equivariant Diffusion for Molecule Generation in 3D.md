@@ -4,8 +4,9 @@ date: 2025-07-31
 permalink: /blog/2025-07-31-Equivariant-Diffusion-for-Molecule-Generation-in-3D
 ---
 
-
-
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 
 In recent years, deep learning has revolutionized how we approach problems in molecular science. From protein structure prediction breakthroughs like DeepMind’s AlphaFold to the design of novel materials and drugs, machine learning models are increasingly becoming indispensable tools in computational chemistry and biology. But while a great deal of progress has been made in analyzing and predicting molecular properties, generating entirely new molecules—particularly in **three dimensions** —remains a challenging frontier.
 
@@ -101,7 +102,7 @@ In the **forward diffusion process** , a molecule's atom positions xxx and atom 
 
 $$z_t = \alpha_t [x, h] + \sigma_t \, \epsilon$$
 
-where $\alpha_t$ and $\sigma_t$ are scheduling parameters controlling the signal and noise levels, and $\epsilon \sim \mathcal{N}(0, I)$ is standard Gaussian noise.
+where $\alpha_t$ and $\sigma_t$ are scheduling parameters controlling the signal and noise levels, and _ε ~ N(0, I)_ is standard Gaussian noise.
 
 In the **reverse process** , the model learns to predict this noise $\epsilon$ given a noisy input $z_t$. From this, the clean data point can be estimated, and the process is iterated backward from _t = T_ to _t = 0_ to obtain a new molecule.
 
@@ -133,6 +134,7 @@ Let’s start with definitions.
 
 - **Invariance** means that a function or distribution doesn’t change when the input is transformed. For example, the _likelihood_ of a molecule should remain the same whether the molecule is rotated or translated. This is crucial for modeling real-world molecules, where position and orientation are arbitrary.
 - **Equivariance** , on the other hand, means that the _output_ of a function changes in the same way as its input. Mathematically, a function _f_ is equivariant to a transformation _R_ if:
+
   $$f(Rx)=Rf(x)$$
 
 In our context, this means that if a molecule is rotated before being passed into the model, the generated output should rotate in exactly the same way. This ensures that the **model’s** **behavior is consistent under geometric transformations** , a critical requirement for accurate 3D generation.
