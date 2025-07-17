@@ -9,7 +9,7 @@ permalink: /blog/2025-07-31-Equivariant-Diffusion-for-Molecule-Generation-in-3D
 </script>
 
 <div id="toc-container">
-  <h2>Contents</h2>
+  <h2>CONTENTS</h2>
   <ul id="toc-list"></ul>
 </div>
 
