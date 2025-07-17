@@ -3,7 +3,7 @@ title: "Equivariant Diffusion for Molecule Generation in 3D"
 date: 2025-07-31
 permalink: /blog/2025-07-31-Equivariant-Diffusion-for-Molecule-Generation-in-3D
 ---
-
+---
 In recent years, deep learning has revolutionized how we approach problems in molecular
 science. From protein structure prediction breakthroughs like DeepMind’s AlphaFold to the
 design of novel materials and drugs, machine learning models are increasingly becoming
@@ -165,6 +165,8 @@ becomes indistinguishable from random noise. For example, for time step ttt, the
 representation is given by:
 
 $$z_t = \alpha_t [x, h] + \sigma_t \, \epsilon$$
+
+where alpha_t and sigma_t are scheduling parameters controlling the signal and noise levels, and epsilon ~ N(0, I) is standard Gaussian noise.
 
 where $\alpha_t$ and $\sigma_t$ are scheduling parameters controlling the signal and noise levels, and $\epsilon \sim \mathcal{N}(0, I)$ is standard Gaussian noise.
 
