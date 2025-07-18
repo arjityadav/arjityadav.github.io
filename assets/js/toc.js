@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     headings.forEach(function (heading, index) {
       var headingText = heading.innerText.trim().toLowerCase(); // Normalize text for comparison
       // Exclude specific headings (adjust text as needed)
-      if (headingText.includes("table of contents") || headingText.includes("nikhil bhavikatti")) {
+      if (headingText.includes("contents") || headingText.includes("arjit yadav")) {
         return; // Skip adding this heading
       }
   
