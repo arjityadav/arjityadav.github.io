@@ -14,7 +14,7 @@ permalink: /blog/2025-07-31-Equivariant-Diffusion-for-Molecule-Generation-in-3D
 Welcome to my blog post summarizing and analyzing the paper <a href="https://arxiv.org/pdf/2203.17003">Equivariant Diffusion for Molecule Generation in 3D</a> by Emiel Hoogeboom et al. This research presents a novel framework that leverages diffusion models equipped with E(3)-equivariance to generate chemically valid 3D molecular structures. By ensuring that the generative process respects the symmetries of three-dimensional space—specifically rotations and translations—the model achieves state-of-the-art performance on molecular datasets. In this post, I will break down the core concepts behind equivariant diffusion, explore how this approach improves molecular conformation generation, and discuss its implications for drug discovery and geometric deep learning.
 
 
-##Introduction
+## 1. Introduction
 
 In recent years, deep learning has revolutionized how we approach problems in molecular science. From protein structure prediction breakthroughs like DeepMind’s AlphaFold to the design of novel materials and drugs, machine learning models are increasingly becoming indispensable tools in computational chemistry and biology. But while a great deal of progress has been made in analyzing and predicting molecular properties, generating entirely new molecules-particularly in **three dimensions** -remains a challenging frontier.
 
