@@ -19,7 +19,7 @@ Welcome to my blog post summarizing and analyzing the paper <a href="https://arx
 In recent years, deep learning has revolutionized how we approach problems in molecular science. From protein structure prediction breakthroughs like DeepMind’s AlphaFold to the design of novel materials and drugs, machine learning models are increasingly becoming indispensable tools in computational chemistry and biology. But while a great deal of progress has been made in analyzing and predicting molecular properties, generating entirely new molecules-particularly in **three dimensions** -remains a challenging frontier.
 
 <figure>
-  <img src="{{ site.baseurl }}/assets/images/jpeg" alt="Molecule in 3D Space" width="640" height="320">
+  <img src="{{ site.baseurl }}/assets/images/1.jpeg" alt="Molecule in 3D Space" width="640" height="320">
   <figcaption style="text-align: center;">Molecule in 3D Space</figcaption>
 </figure>
 
