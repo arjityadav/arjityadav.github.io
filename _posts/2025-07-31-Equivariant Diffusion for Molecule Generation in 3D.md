@@ -18,6 +18,11 @@ Welcome to my blog post summarizing and analyzing the paper <a href="https://arx
 
 In recent years, deep learning has revolutionized how we approach problems in molecular science. From protein structure prediction breakthroughs like DeepMind’s AlphaFold to the design of novel materials and drugs, machine learning models are increasingly becoming indispensable tools in computational chemistry and biology. But while a great deal of progress has been made in analyzing and predicting molecular properties, generating entirely new molecules-particularly in **three dimensions** -remains a challenging frontier.
 
+<figure>
+  <img src="{{ site.baseurl }}/assets/images/1.jpg" alt="Molecule in 3D Space" width="640" height="320">
+  <figcaption style="text-align: center;">Molecule in 3D Space</figcaption>
+</figure>
+
 Why does 3D matter? Molecules are not just abstract graphs of atoms and bonds; they exist in **physical space**. Their 3D conformations determine how they interact with biological targets, bind to receptors, and exhibit chemical properties like reactivity and solubility. Capturing this spatial structure accurately is vital, especially for downstream applications like **drug discovery** , where the difference between a successful and failed candidate can hinge on subtle spatial interactions.
 
 Traditional molecule generation models have typically worked in **2D graph space** , representing molecules as nodes (atoms) and edges (bonds). While useful, this approach neglects crucial geometric information-like the actual positions of atoms in 3D space. More recent approaches have attempted to bridge this gap by predicting conformations after generating 2D molecules. However, these multi-step pipelines often introduce inaccuracies and fail to account for
