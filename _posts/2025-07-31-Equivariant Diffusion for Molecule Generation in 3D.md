@@ -279,7 +279,7 @@ All components are fully connected neural networks, and their design ensures
 **E(3)-equivariance is preserved throughout**.
 
 <figure>
-  <img src="{{ site.baseurl }}/images/egnnmol.png" alt="Visualization of a Graph Neural Network (GNN) representing a molecular structure, where atoms are depicted as nodes and chemical bonds as edges, capturing the complex spatial and relational dependencies within the molecule." width="640" height="320">
+  <img src="{{ site.baseurl }}/images/egnnmol.jpeg" alt="Visualization of a Graph Neural Network (GNN) representing a molecular structure, where atoms are depicted as nodes and chemical bonds as edges, capturing the complex spatial and relational dependencies within the molecule." width="640" height="320">
   <figcaption style="text-align: center;">Figure  5. Visualization of a Graph Neural Network (GNN) representing a molecular structure, where atoms are depicted as nodes and chemical bonds as edges, capturing the complex spatial and relational dependencies within the molecule.</figcaption>
 </figure>
 
