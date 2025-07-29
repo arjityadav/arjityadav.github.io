@@ -595,10 +595,16 @@ Whether you’re a computational chemist, a machine learning researcher, or a cu
 
 ---
 
-**📖 References**  
-[Hoogeboom et al., 2022](https://arxiv.org/abs/2203.17003)  
-[Satorras et al., 2021 – EGNN](https://arxiv.org/abs/2102.09844)  
-[QM9 Dataset](https://deepchem.io/datasets)
+**📖 References**
+
+- [Diffusion Models: A Comprehensive Survey of Methods and Applications](https://arxiv.org/pdf/2209.00796)
+- [Equivariant Diffusion for Molecule Generation in 3D](https://arxiv.org/abs/2203.17003)
+- [E(n) Equivariant Graph Neural Networks](https://arxiv.org/abs/2102.09844)
+- [Cormorant: Covariant Molecular Neural Networks](https://proceedings.neurips.cc/paper/2019/file/03573b32b2746e6e8ca98b9123f2249b-Paper.pdf)
+- [Structured Denoising Diffusion Models in Discrete State-Spaces](https://proceedings.neurips.cc/paper/2021/hash/958c530554f78bcd8e97125b70e6973d-Abstract.html)
+- [De Cao, N. and Kipf, T. Molgan: An implicit generative
+  model for small molecular graphs. ICML Workshop on
+  Theoretical Foundations and Applications of Deep Generative Models, 2018.](https://arxiv.org/abs/1805.11973)
 
 ---
 
