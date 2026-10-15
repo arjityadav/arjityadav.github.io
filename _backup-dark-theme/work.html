@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Work · Arjit Yadav</title>
+<meta name="description" content="Work experience of Arjit Yadav, software engineer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="home" href="index.html">Arjit Yadav</a>
+    <nav aria-label="Pages">
+      <a href="work.html" aria-current="page">Work</a>
+      <a href="projects.html">Projects</a>
+      <a href="about.html">Education and skills</a>
+    </nav>
+  </header>
+</div>
+<main class="wrap">
+
+  <div class="page-head">
+    <h1 class="pressed">Work</h1>
+    <p>LLM tooling, computer vision, automation and backend systems, most recent first.</p>
+  </div>
+  <div class="jobs">
+    <article class="job">
+      <div class="when">06/2026 – now</div>
+      <div>
+        <h2>Software Engineer</h2>
+        <p class="where">SWJ Germany GmbH</p>
+        <ul>
+          <li>LLM-driven regression test selection for automotive software: when the code changes, it works out which tests actually need to run, and in what order.</li>
+          <li>Python ETL pipeline that pulls requirements, test cases and task descriptions from Codebeamer on every run and filters them to what the project rules consider relevant.</li>
+          <li>Git pipeline that extracts the code diff between software versions.</li>
+          <li>Code impact module on Google Gemini that reads each task description alongside its diff and identifies which parts of the software the change touches.</li>
+        </ul>
+      </div>
+    </article>
+    <article class="job">
+      <div class="when">11/2025 – 04/2026</div>
+      <div>
+        <h2>Working Student</h2>
+        <p class="where">Valeo Schalter und Sensoren GmbH</p>
+        <ul>
+          <li>Built the team's tool for validating quality reports: a Streamlit interface for uploading test and requirement specifications, traceability matrices and test reports as Excel, CSV or PDF.</li>
+          <li>Python backend that checks each upload is the document it claims to be and complete enough to use, then cleans and filters it against the team's rules.</li>
+          <li>Vertex AI does the final pass, checking the test report against the specifications and flagging where they disagree. That cross-check used to be done by hand.</li>
+        </ul>
+      </div>
+    </article>
+    <article class="job">
+      <div class="when">07/2024 – 04/2025</div>
+      <div>
+        <h2>Working Student, AI and Computer Vision</h2>
+        <p class="where">Vreed Immobilien Digital</p>
+        <ul>
+          <li>Fine-tuned VGG16 classifiers in PyTorch to sort photos of WBS70 Plattenbau housing, reaching 78% accuracy on imagery never shot to any standard.</li>
+          <li>Trained Detectron2 (R50-FPN) models to locate solar panels and window frames in facade images for automated energy efficiency audits.</li>
+          <li>Built a balcony detector from scratch (AP 54) so renovation planning data could be collected city-wide instead of surveyed by hand.</li>
+        </ul>
+      </div>
+    </article>
+    <article class="job">
+      <div class="when">04/2023 – 09/2023</div>
+      <div>
+        <h2>Software Engineer, project-based</h2>
+        <p class="where">JindalX</p>
+        <ul>
+          <li>Automated around 15 manual billing and claim-filing processes in healthcare revenue cycle management with Python, Selenium and PyAutoGUI.</li>
+          <li>Retry logic and logging so failures surfaced instead of quietly corrupting billing records, with HIPAA-compliant data handling.</li>
+          <li>Wrote down the business rules the operations team followed by habit and turned them into the specs the automation ran on.</li>
+        </ul>
+      </div>
+    </article>
+    <article class="job">
+      <div class="when">03/2022 – 09/2023</div>
+      <div>
+        <h2>Software Engineer</h2>
+        <p class="where">SaaS Platformen ApS</p>
+        <ul>
+          <li>Distributed scrapers on AWS Lambda pulling car listings from 32 sources into one schema.</li>
+          <li>REST services and MongoDB collections behind millions of listings with constantly changing prices and availability.</li>
+          <li>Alerting on AWS SNS/SQS for price drops and new matches against saved filters.</li>
+          <li>CI/CD with GitHub Actions and Docker, plus health checks, taking the manual steps out of every release.</li>
+        </ul>
+      </div>
+    </article>
+    <article class="job">
+      <div class="when">04/2021 – 10/2021</div>
+      <div>
+        <h2>Data Scientist</h2>
+        <p class="where">Pivony</p>
+        <ul>
+          <li>Semantic document search on MPNet embeddings that caught paraphrased queries keyword search missed.</li>
+          <li>Turkish NLP pipeline extracting addresses from free text and resolving them to GPS coordinates.</li>
+          <li>Topic labelling on top of LDA, turning term distributions into short labels a person could read.</li>
+          <li>Owned the REST APIs serving all of it, including maintenance after handover.</li>
+        </ul>
+      </div>
+    </article>
+    <article class="job">
+      <div class="when">06/2019 – 08/2019</div>
+      <div>
+        <h2>Data Analyst Intern and Mentor</h2>
+        <p class="where">Aam Aadmi Party, Data Analysis Division</p>
+        <ul>
+          <li>Python scraping and OCR pipeline turning thousands of scanned voter-list PDFs into structured records.</li>
+          <li>A Python library for constituency-level demographic breakdowns, used across the division.</li>
+          <li>Co-led mentoring for about 100 interns: onboarding, code review and data consistency across teams.</li>
+        </ul>
+      </div>
+    </article>
+  </div>
+  <p class="next"><a href="projects.html">Next: Projects</a></p>
+
+</main>
+<div class="wrap">
+  <footer class="contact" id="contact">
+    <p class="big"><a href="mailto:arjit3004@gmail.com">arjit3004@gmail.com</a></p>
+    <div class="others">
+      <a href="https://linkedin.com/in/arjityadav">LinkedIn</a>
+      <a href="https://github.com/arjityadav">GitHub</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

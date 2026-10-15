@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects · Arjit Yadav</title>
+<meta name="description" content="EU AI Act Compliance Copilot and other projects by Arjit Yadav.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="home" href="index.html">Arjit Yadav</a>
+    <nav aria-label="Pages">
+      <a href="work.html">Work</a>
+      <a href="projects.html" aria-current="page">Projects</a>
+      <a href="about.html">Education and skills</a>
+    </nav>
+  </header>
+</div>
+<main class="wrap">
+
+  <div class="page-head">
+    <h1 class="pressed">Projects</h1>
+    <p>Things I built end to end, from retrieval and evals to the server they run on.</p>
+  </div>
+
+  <article class="project">
+    <h2>EU AI Act Compliance Copilot</h2>
+    <p class="kind">A multi-agent RAG system that classifies AI systems under the EU AI Act and maps their obligations, deadlines and compliance gaps.</p>
+    <div class="links">
+      <a href="https://ai-act-copilot.duckdns.org">Live demo</a>
+      <a href="https://github.com/arjityadav/ai-act-copilot">Source on GitHub</a>
+    </div>
+    <div class="figures">
+      <div><strong>0.90</strong>recall@5, vs 0.42 keyword-only</div>
+      <div><strong>57%</strong>faster assessments</div>
+      <div><strong>0.22 → 0.73</strong>classifier macro F1</div>
+      <div><strong>$0</strong>hosting cost</div>
+    </div>
+
+    <h3>How it works</h3>
+    <ul>
+      <li>LangGraph pipeline with a clarifying-question step, parallel LLM and ML classification, and a writer–verifier loop capped at three attempts.</li>
+      <li>Hybrid retrieval over the full Act (292 structure-aware chunks) with pgvector, Postgres full-text search and Reciprocal Rank Fusion.</li>
+      <li>Citations, legal rules and deadlines are checked in code rather than trusted from the model, with prompt-injection and PII guardrails in front.</li>
+    </ul>
+
+    <h3>What moved the numbers</h3>
+    <ul>
+      <li>A 20-scenario eval suite drove the fixes: one run showed the verifier rejecting correct reports, and moving that step into code cut assessment time by 57%.</li>
+      <li>An Annex III classifier acts as an independent second opinion, with an MLflow registry, a promotion gate and drift monitoring. Hand-reviewing 270 synthetic rows (43 relabelled, 72 removed as wrong or leaking) took macro F1 from 0.22 to 0.73.</li>
+    </ul>
+
+    <h3>How it ships</h3>
+    <ul>
+      <li>Runs on Oracle Cloud with Docker Compose, Caddy and a Streamlit UI, using gpt-oss-120b on Groq.</li>
+      <li>GitHub Actions runs integration tests against real Postgres and Redis; the server deploys green commits and rolls back unhealthy releases on its own.</li>
+    </ul>
+
+    <ul class="stack" aria-label="Stack">
+      <li>LangGraph</li><li>pgvector</li><li>PostgreSQL</li><li>Redis</li><li>scikit-learn</li><li>MLflow</li><li>Docker Compose</li><li>Caddy</li><li>Streamlit</li><li>GitHub Actions</li><li>Groq</li>
+    </ul>
+  </article>
+{next_link("about.html", "Education and skills")}
+
+</main>
+<div class="wrap">
+  <footer class="contact" id="contact">
+    <p class="big"><a href="mailto:arjit3004@gmail.com">arjit3004@gmail.com</a></p>
+    <div class="others">
+      <a href="https://linkedin.com/in/arjityadav">LinkedIn</a>
+      <a href="https://github.com/arjityadav">GitHub</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
