@@ -296,10 +296,10 @@
   <div class="ticker" aria-hidden="true">
     <div class="ticker-track">
       <div class="tg">
-        <span>LLM TEST SELECTION FOR AUTOMOTIVE</span><span>RECALL@5 0.42 → 0.90</span><span>MACRO F1 0.22 → 0.73</span><span>57% FASTER ASSESSMENTS</span><span>32 SOURCES ON AWS LAMBDA</span><span>~15 BILLING PROCESSES AUTOMATED</span><span>BALCONY DETECTOR — AP 54</span><span>SPIKING NEURAL NETWORKS</span><span>M.SC STUTTGART — 1.9</span><span>100 INTERNS MENTORED</span><span>LANGGRAPH · PGVECTOR · PYTORCH · DOCKER</span>
+        <span>LLM TEST SELECTION FOR AUTOMOTIVE</span><span>RECALL@5 0.42 → 0.90</span><span>MACRO F1 0.22 → 0.73</span><span>57% FASTER ASSESSMENTS</span><span>32 SOURCES ON AWS LAMBDA</span><span>~15 BILLING PROCESSES AUTOMATED</span><span>BALCONY DETECTOR — AP 54</span><span>SPIKING U-NET — 500K PARAMS</span><span>~45% LESS POWER THAN ANN</span><span>M.SC STUTTGART — 1.9</span><span>100 INTERNS MENTORED</span><span>LANGGRAPH · PGVECTOR · PYTORCH · DOCKER</span>
       </div>
       <div class="tg">
-        <span>LLM TEST SELECTION FOR AUTOMOTIVE</span><span>RECALL@5 0.42 → 0.90</span><span>MACRO F1 0.22 → 0.73</span><span>57% FASTER ASSESSMENTS</span><span>32 SOURCES ON AWS LAMBDA</span><span>~15 BILLING PROCESSES AUTOMATED</span><span>BALCONY DETECTOR — AP 54</span><span>SPIKING NEURAL NETWORKS</span><span>M.SC STUTTGART — 1.9</span><span>100 INTERNS MENTORED</span><span>LANGGRAPH · PGVECTOR · PYTORCH · DOCKER</span>
+        <span>LLM TEST SELECTION FOR AUTOMOTIVE</span><span>RECALL@5 0.42 → 0.90</span><span>MACRO F1 0.22 → 0.73</span><span>57% FASTER ASSESSMENTS</span><span>32 SOURCES ON AWS LAMBDA</span><span>~15 BILLING PROCESSES AUTOMATED</span><span>BALCONY DETECTOR — AP 54</span><span>SPIKING U-NET — 500K PARAMS</span><span>~45% LESS POWER THAN ANN</span><span>M.SC STUTTGART — 1.9</span><span>100 INTERNS MENTORED</span><span>LANGGRAPH · PGVECTOR · PYTORCH · DOCKER</span>
       </div>
     </div>
   </div>
@@ -469,10 +469,39 @@
       </article>
 
       <article class="proj reveal">
-        <div class="proj-top"><span class="proj-index">P.02 — RESEARCH · M.SC THESIS</span><span>UNIVERSITÄT STUTTGART</span></div>
-        <h3 class="proj-title">Energy-efficient semantic segmentation with spiking neural networks</h3>
-        <p class="proj-desc">Master's thesis in the Autonomous Systems track, on making <strong>pixel-level scene understanding</strong> cheaper to run by moving it onto <strong>spiking neural networks</strong>, the event-driven models the animation at the top of this page is a nod to.</p>
-        <p class="proj-tags">Spiking Neural Networks · Semantic Segmentation · PyTorch · Autonomous Systems</p>
+        <div class="proj-top"><span class="proj-index">P.02 — RESEARCH · M.SC THESIS</span><span>VIS INSTITUTE · UNIVERSITÄT STUTTGART · 2025–26</span></div>
+        <h3 class="proj-title">Energy-efficient semantic segmentation using spiking neural networks</h3>
+        <p class="proj-desc">An <strong>ultra-lightweight Spiking U-Net</strong> for segmenting driving scenes, the kind of event-driven network the animation at the top of this page is a nod to. Population coding with direct training gets <strong>competitive accuracy in a single timestep (T=1)</strong>, sidestepping the usual SNN trade-off between latency and accuracy.</p>
+        <div class="figures">
+          <div><strong>500K</strong>trainable parameters</div>
+          <div><strong>17×</strong>smaller than the prior spiking state of the art</div>
+          <div><strong>~45%</strong>lower estimated hardware power vs. the ANN</div>
+          <div><strong>1.86%</strong>from the ANN baseline on DDD-17 events</div>
+        </div>
+        <div class="proj-cols">
+          <div>
+            <h4>What was compared</h4>
+            <ul>
+              <li>Three ways to get a working SNN: direct spatiotemporal backpropagation (STBP), post-training ANN-to-SNN calibration, and a two-stage hybrid that calibrates and then fine-tunes.</li>
+              <li>Tested on data of increasing difficulty: synthetic CLEVR scenes, noisy Cityscapes driving frames and native neuromorphic event streams from DDD-17.</li>
+            </ul>
+          </div>
+          <div>
+            <h4>What it found</h4>
+            <ul>
+              <li>Calibration and hybrid methods hold up on synthetic data but break down under real-world driving noise.</li>
+              <li>Replacing noisy temporal rate coding with spatial redundancy (population coding) and training directly with STBP fixes this at T=1.</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Why it matters</h4>
+            <ul>
+              <li>68× smaller than the ANN baseline, and roughly an order of magnitude better than existing single-neuron SNNs at detecting dynamic targets such as pedestrians.</li>
+              <li>A practical route to real-time perception on low-power neuromorphic hardware.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="proj-tags">PyTorch · snnTorch · Surrogate gradients · LIF neurons · Population coding · U-Net · Cityscapes · DDD-17 · Weights &amp; Biases</p>
       </article>
     </div>
   </section>
@@ -488,7 +517,7 @@
 
       <div class="edu-row reveal">
         <div><h3 class="edu-degree">M.Sc. Computer Science</h3><p class="edu-school">Universität Stuttgart — Germany · 10/2023 – 05/2026</p></div>
-        <p class="edu-grade">Grade 1.9 · Major in Autonomous Systems</p>
+        <p class="edu-grade">Grade 1.9 · Major in Autonomous Systems · Thesis: Spiking U-Net for energy-efficient segmentation</p>
         <span class="edu-status">GRADUATED</span>
       </div>
       <div class="edu-row reveal">
@@ -642,7 +671,7 @@
     {name:"Pivony",              map:"PIVONY",        years:"2021",     x:.22, y:.72, line:"Semantic search on MPNet embeddings and a Turkish address-extraction pipeline."},
     {name:"SaaS Platformen",     map:"SAAS PLATFORMEN", years:"2022–23", x:.68, y:.62, line:"Serverless scrapers pulling car listings from 32 sources into one schema."},
     {name:"JindalX",             map:"JINDALX",       years:"2023",     x:.30, y:.51, line:"Automated ~15 manual healthcare billing and claim-filing processes."},
-    {name:"Universität Stuttgart", map:"UNI STUTTGART", years:"M.SC · 1.9", x:.80, y:.40, line:"M.Sc. Computer Science, Autonomous Systems. Thesis on spiking neural networks for segmentation."},
+    {name:"Universität Stuttgart", map:"UNI STUTTGART", years:"M.SC · 1.9", x:.80, y:.40, line:"M.Sc. Computer Science. Thesis: a 500K-parameter Spiking U-Net, ~45% lower estimated power than its ANN counterpart."},
     {name:"Vreed",               map:"VREED",         years:"2024–25",  x:.40, y:.29, line:"Detectron2 models for facades: solar panels, window frames, and a balcony detector at AP 54."},
     {name:"Valeo",               map:"VALEO",         years:"2025–26",  x:.76, y:.18, line:"Quality-report validation tool where Vertex AI cross-checks test reports against specs."},
     {name:"SWJ Germany",         map:"SWJ GERMANY",   years:"2026 —",   x:.44, y:.06, line:"LLM-driven regression test selection for automotive software.", now:true}
