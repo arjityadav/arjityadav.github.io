@@ -1,1 +1,4 @@
 .DS_Store
+# originals with personal data; publish redacted copies from letters/
+/*.pdf
+!/Arjit_Yadav_lebenslauf.pdf
